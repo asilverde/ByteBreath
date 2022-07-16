@@ -4,12 +4,11 @@ import {StyleSheet, View, Animated} from 'react-native';
 export default function Slider() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isInhaling, setIsInhaling] = useState(true);
-  const translation = useRef(new Animated.Value(225)).current
+  const translation = useRef(new Animated.Value(-225)).current
 
   const calcRadialDist = (x_dist, y_dist) => {
     return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
   }
-
   const startBreathing = () => {
     setIsFollowing(true);
   }
@@ -23,7 +22,7 @@ export default function Slider() {
       height: 150,
       borderRadius: 100,
       backgroundColor: isFollowing ? 'green' : 'red',
-      transform: [{translateY:translation}]
+      transform: [{translateX:translation}]
     },
     touch: {
         width: 150,
@@ -34,35 +33,39 @@ export default function Slider() {
   });
 
   useEffect(() => {
-    const target = (-1 * (isInhaling * 450 - 225));
+    const target = (isInhaling * 450 - 225);
     Animated.timing(translation, {
         toValue: target,
         useNativeDriver: false,
         duration: 5000,
-    }).start(({hold}) => {
-        if (hold) {
+    }).start(({finished}) => {
+        setTimeout(() => {
+          if (finished) {
             setIsInhaling(!isInhaling);
-        }
+          }
+        }, 2000);
     })
   }, [isInhaling]);
 
   return (
-    <Animated.View style = {styles.button}>
+    <React.Fragment>
+      <Animated.View style = {styles.button}>
         <View
         style = {styles.touch}
         onStartShouldSetResponder={() => true}
         onResponderMove={(event) => {
-            radialDist = calcRadialDist(event.nativeEvent.locationX + 50, event.nativeEvent.locationY - 50)
-            if (radialDist > 75) {
-                stopBreathing();
-            } else {
-                startBreathing();
-            }
+          const radialDist = calcRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
+          if (radialDist > 75) {
+              stopBreathing();
+          } else {
+              startBreathing();
+          }
         }}
         onResponderRelease={() => {
             stopBreathing();
         }}>
         </View>
-    </Animated.View>
+      </Animated.View>
+    </React.Fragment>
   );
 }
