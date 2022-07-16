@@ -2,16 +2,22 @@ import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, View, Animated} from 'react-native';
 
 export default function Slider() {
+  const [hasStarted, setHasStarted] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [isInhaling, setIsInhaling] = useState(true);
+  const [isInhaling, setIsInhaling] = useState(false);
   const translation = useRef(new Animated.Value(-225)).current
 
   const calcRadialDist = (x_dist, y_dist) => {
     return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
   }
   const startBreathing = () => {
+    if (!hasStarted) {
+      setIsInhaling(true);
+      setHasStarted(true);
+    }
     setIsFollowing(true);
   }
+
   const stopBreathing = () => {
     setIsFollowing(false);
   }
@@ -39,13 +45,15 @@ export default function Slider() {
         useNativeDriver: false,
         duration: 5000,
     }).start(({finished}) => {
-        setTimeout(() => {
-          if (finished) {
-            setIsInhaling(!isInhaling);
-          }
-        }, 2000);
+        if (hasStarted) {
+          setTimeout(() => {
+            if (finished) {
+              setIsInhaling(!isInhaling);
+            }
+          }, 2000);
+        }
     })
-  }, [isInhaling]);
+  }, [isInhaling, hasStarted]);
 
   return (
     <React.Fragment>
@@ -53,6 +61,9 @@ export default function Slider() {
         <View
         style = {styles.touch}
         onStartShouldSetResponder={() => true}
+        onResponderStart={() => {
+          startBreathing();
+        }}
         onResponderMove={(event) => {
           const radialDist = calcRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
           if (radialDist > 75) {
