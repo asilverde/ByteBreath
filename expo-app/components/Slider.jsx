@@ -46,6 +46,17 @@ export default function Slider( {endSession} ) {
   }
 
   const styles = StyleSheet.create({
+    container: {
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    text: {
+      fontSize: 20,
+      fontWeight: "bold",
+      padding: 20,
+    },
     button: {
       width: 150,
       height: 150,
@@ -63,8 +74,11 @@ export default function Slider( {endSession} ) {
 
   useEffect(() => {
     checkRelease();
-    if (loseFlag || (count == 10 && isInhaling)) {
-      endSession();
+    if (loseFlag) {
+      endSession(count);
+    } else if (count == 9 && isInhaling) {
+      endSession(count+1);
+      Vibration.cancel();
     } else {
       if (releaseFlag && isInhaling) {
         setReleaseFlag(false);
@@ -87,8 +101,8 @@ export default function Slider( {endSession} ) {
   }, [isInhaling, hasStarted, loseFlag]);
 
   return (
-    <React.Fragment>
-      <Text>{count}</Text>
+    <View style = {styles.container}>
+      <Text style = {styles.text}>{(!hasStarted || isInhaling) ? "INHALE" : "EXHALE"}</Text>
       <Animated.View style = {styles.button}>
         <View
         style = {styles.touch}
@@ -109,6 +123,7 @@ export default function Slider( {endSession} ) {
         }}>
         </View>
       </Animated.View>
-    </React.Fragment>
+      <Text style = {styles.text}>{count}</Text>
+    </View>
   );
 }

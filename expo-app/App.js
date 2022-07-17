@@ -21,16 +21,25 @@ function MeditateScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Slider
-        endSession={() => navigation.navigate('Home')}
+        endSession={(breathCount) => navigation.navigate('End', {breathCount})}
       />
     </View>
   );
 }
 
-function EndScreen() {
+function EndScreen({ route, navigation }) {
+  const {breathCount} = route.params;
+  let endText = `You only completed ${breathCount} breaths.`;
+  if (breathCount == 10) {
+    endText = "Congratulations! You have completed 10 breaths."
+  }
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+      <Text>{endText}</Text>
+      <Button
+        title="Restart"
+        onPress={() => navigation.navigate('Home')}
+      />
     </View>
   );
 }
@@ -44,6 +53,7 @@ function App() {
        screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Meditate" component={MeditateScreen} />
+        <Stack.Screen name="End" component={EndScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -57,5 +67,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    padding: 20,
   },
 });
