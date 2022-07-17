@@ -17,10 +17,12 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function MeditateScreen() {
+function MeditateScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Slider/>
+      <Slider
+        endSession={() => navigation.navigate('Home')}
+      />
     </View>
   );
 }

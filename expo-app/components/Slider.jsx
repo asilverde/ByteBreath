@@ -1,16 +1,32 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {StyleSheet, View, Animated} from 'react-native';
+import {StyleSheet, View, Animated, Vibration, Text} from 'react-native';
 
-export default function Slider() {
+export default function Slider( {endSession} ) {
   const [hasStarted, setHasStarted] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isInhaling, setIsInhaling] = useState(false);
   const translation = useRef(new Animated.Value(-225)).current
+  
+  const [timeOfRelease, setTimeOfRelease] = useState(0);
+  const [loseFlag, setLoseFlag] = useState(false);
+  const [releaseFlag, setReleaseFlag] = useState(true);
+  const [count, updateCount] = useState(0);
 
   const calcRadialDist = (x_dist, y_dist) => {
     return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
   }
+  
+  // TRUE if button left longer 5s untouched.
+  const checkRelease = () => {
+    if (timeOfRelease != 0 && Date.now() - timeOfRelease > 5000) {
+      setLoseFlag(true);
+    }
+  }
+
   const startBreathing = () => {
+    checkRelease();
+    setTimeOfRelease(0);
+    Vibration.cancel();
     if (!hasStarted) {
       setIsInhaling(true);
       setHasStarted(true);
@@ -19,7 +35,14 @@ export default function Slider() {
   }
 
   const stopBreathing = () => {
-    setIsFollowing(false);
+    if (isFollowing) {
+      setReleaseFlag(true);
+      setIsFollowing(false);
+      if (timeOfRelease == 0) {
+        setTimeOfRelease(Date.now());
+      }
+      Vibration.vibrate([0, 1000, 1000, 1000, 1000]);
+    }
   }
 
   const styles = StyleSheet.create({
@@ -39,24 +62,33 @@ export default function Slider() {
   });
 
   useEffect(() => {
-    const target = (isInhaling * 450 - 225);
-    Animated.timing(translation, {
-        toValue: target,
-        useNativeDriver: false,
-        duration: 5000,
-    }).start(({finished}) => {
-        if (hasStarted) {
-          setTimeout(() => {
-            if (finished) {
+    checkRelease();
+    if (loseFlag || (count == 10 && isInhaling)) {
+      endSession();
+    } else {
+      if (releaseFlag && isInhaling) {
+        setReleaseFlag(false);
+      } else if (hasStarted && isInhaling) {
+        updateCount(count+1);
+      }
+      const target = (isInhaling * 450 - 225);
+      Animated.timing(translation, {
+          toValue: target,
+          useNativeDriver: false,
+          duration: 5000,
+      }).start(({finished}) => {
+          if (finished && hasStarted) {
+            setTimeout(() => {
               setIsInhaling(!isInhaling);
-            }
-          }, 2000);
-        }
-    })
-  }, [isInhaling, hasStarted]);
+            }, 2000);
+          }
+      });
+    }
+  }, [isInhaling, hasStarted, loseFlag]);
 
   return (
     <React.Fragment>
+      <Text>{count}</Text>
       <Animated.View style = {styles.button}>
         <View
         style = {styles.touch}
