@@ -89,31 +89,33 @@ export default function Slider( {endSession} ) {
     }, [command, hasStarted, loseFlag]);
 
     return (
-      <View style = {styles.container}>
-          <Text style = {styles.text}>{commands[command]}</Text>
-          <View style = {styles.track}>
-              <Animated.View style = {[styles.button, {transform: [{translateX:translation}]}]}>
-                  <View
-                  style = {[styles.touch, {backgroundColor: isFollowing ? 'green' : 'red'}]}
-                  onStartShouldSetResponder={() => true}
-                  onResponderStart={() => {
-                      startBreathing();
-                  }}
-                  onResponderMove={(event) => {
-                      const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
-                      if (radialDist > 75) {
-                          stopBreathing();
-                      } else {
-                          startBreathing();
-                      }
-                  }}
-                  onResponderRelease={() => {
-                      stopBreathing();
-                  }}>
-                  </View>
-              </Animated.View>
-          </View>
-          <Text style = {styles.text}>{count}</Text>
-      </View>
+        <View style = {styles.container}>
+            <Text style = {styles.text}>{commands[command]}</Text>
+            <View style = {styles.track}>
+                <Animated.View style = {[styles.button, {transform: [{translateX:translation}]}]}>
+                    <View
+                    style = {[styles.touch, {backgroundColor: isFollowing ? 'green' : 'red'}]}
+                    onStartShouldSetResponder={() => true}
+                    onResponderStart={() => {
+                        startBreathing();
+                    }}
+                    onResponderMove={(event) => {
+                        if (event.nativeEvent.touches.length < 2) {
+                            const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
+                            if (radialDist > 75) {
+                                stopBreathing();
+                            } else {
+                                startBreathing();
+                            }
+                        }
+                    }}
+                    onResponderRelease={() => {
+                        stopBreathing();
+                    }}>
+                    </View>
+                </Animated.View>
+            </View>
+            <Text style = {styles.text}>{count}</Text>
+        </View>
     );
 }
