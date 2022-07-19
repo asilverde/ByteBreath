@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Slider from "./components/Slider.jsx"
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { AntDesign } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons'; 
+
+import Slider from "./components/Slider.js"
 
 function HomeScreen({ navigation }) {
   return (
@@ -12,7 +15,7 @@ function HomeScreen({ navigation }) {
       <TouchableOpacity
       style={styles.button}
       onPress={() => navigation.navigate('Meditate')}>
-          <Text style={{fontSize: 24, padding:10}}>Begin</Text>
+          <AntDesign name="arrowright" size={30} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -36,11 +39,12 @@ function EndScreen({ route, navigation }) {
   }
   return (
     <View style={styles.container}>
+      <Text style={styles.header}></Text>
       <Text style={styles.text}>{endText}</Text>
       <TouchableOpacity
       style={styles.button}
       onPress={() => navigation.navigate('Home')}>
-          <Text style={{fontSize: 24, padding:10}}>Restart</Text>
+          <Fontisto name="redo" size={24} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -87,6 +91,7 @@ const styles = StyleSheet.create({
     height:50,
     alignItems: "center",
     backgroundColor: "#b3effc",
-    borderRadius: 25
+    borderRadius: 25,
+    padding: 10
   }
 });
