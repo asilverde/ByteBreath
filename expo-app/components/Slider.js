@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, View, Animated, Vibration, Text} from 'react-native';
 import styles from './Slider.style.js';
+import { Audio } from 'expo-av';
 
-export default function Slider( {endSession} ) {
+function Slider( {endSession} ) {
     const commands = ['INHALE', 'PAUSE', 'EXHALE', 'PAUSE'];
     const [command, updateCommand] = useState(0);
     const [count, updateCount] = useState(0);
@@ -14,6 +15,8 @@ export default function Slider( {endSession} ) {
     const [timeOfRelease, setTimeOfRelease] = useState(0);
     const [loseFlag, setLoseFlag] = useState(false);
     const [releaseFlag, setReleaseFlag] = useState(false);
+
+    const AudioPlayer = useRef(new Audio.Sound());
 
     const calculateRadialDist = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -64,6 +67,18 @@ export default function Slider( {endSession} ) {
         return true;
     }
 
+    async function playInhale() {
+        await AudioPlayer.current.unloadAsync();
+        await AudioPlayer.current.loadAsync(require('../assets/INHALE.wav'), {}, true);
+        await AudioPlayer.current.playAsync();
+    }
+
+    async function playExhale() {
+        await AudioPlayer.current.unloadAsync();
+        await AudioPlayer.current.loadAsync(require('../assets/EXHALE.wav'), {}, true);
+        await AudioPlayer.current.playAsync();
+    }
+        
     useEffect(() => {
         if (hasStarted && checkEndSession()) {
             checkRelease();
@@ -73,6 +88,7 @@ export default function Slider( {endSession} ) {
                 }, 2000);
                 updateBreathCount();
             } else {
+                (command == 0) ? playInhale() : playExhale();
                 const target = (command == 0) ? 225 : -225;
                 Animated.timing(translation, {
                   toValue: target,
@@ -119,3 +135,5 @@ export default function Slider( {endSession} ) {
         </View>
     );
 }
+
+export default Slider;
