@@ -29,7 +29,7 @@ function MeditateScreen({ navigation }) {
 
 function EndScreen({ route, navigation }) {
   const {breathCount} = route.params;
-  let endText = `You only completed ${breathCount} breaths.`;
+  let endText = `You only completed ${breathCount} breath(s).`;
   if (breathCount == 10) {
     endText = "Congratulations! You have completed 10 breaths."
   }
