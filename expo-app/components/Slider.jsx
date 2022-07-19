@@ -63,79 +63,88 @@ export default function Slider( {endSession} ) {
       return true;
   }
 
-  const styles = StyleSheet.create({
-    container: {
-      height: '100%',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    text: {
-      fontSize: 20,
-      fontWeight: "bold",
-      padding: 20,
-    },
-    button: {
-      width: 150,
-      height: 150,
-      borderRadius: 100,
-      transform: [{translateX:translation}]
-    },
-    touch: {
-      width: 150,
-      height: 150,
-      borderRadius: 100,
-      backgroundColor: isFollowing ? 'green' : 'red'
-  },
-  });
-
   useEffect(() => {
-    if (hasStarted && checkEndSession()) {
-        checkRelease();
-        if (command % 2 == 1) {
-            setTimeout(() => {
-                updateCommand((command + 1) % 4);
-            }, 2000);
-            updateBreathCount();
-        } else {
-            const target = (command == 0) ? 225 : -225;
-            Animated.timing(translation, {
-              toValue: target,
-              useNativeDriver: false,
-              duration: 5000,
-            }).start(({finished}) => {
-                if (finished) { 
-                    updateCommand((command + 1) % 4);
-                }
-            });
-        }
-    }
+      if (hasStarted && checkEndSession()) {
+          checkRelease();
+          if (command % 2 == 1) {
+              setTimeout(() => {
+                  updateCommand((command + 1) % 4);
+              }, 2000);
+              updateBreathCount();
+          } else {
+              const target = (command == 0) ? 225 : -225;
+              Animated.timing(translation, {
+                toValue: target,
+                useNativeDriver: false,
+                duration: 5000,
+              }).start(({finished}) => {
+                  if (finished) { 
+                      updateCommand((command + 1) % 4);
+                  }
+              });
+          }
+          checkRelease();
+      }
   }, [command, hasStarted, loseFlag]);
 
   return (
     <View style = {styles.container}>
-      <Text style = {styles.text}>{commands[command]}</Text>
-      <Animated.View style = {styles.button}>
-      <View
-      style = {styles.touch}
-      onStartShouldSetResponder={() => true}
-      onResponderStart={() => {
-          startBreathing();
-      }}
-      onResponderMove={(event) => {
-          const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
-          if (radialDist > 75) {
-              stopBreathing();
-          } else {
-              startBreathing();
-          }
-      }}
-      onResponderRelease={() => {
-          stopBreathing();
-      }}>
-      </View>
-      </Animated.View>
-      <Text style = {styles.text}>{count}</Text>
+        <Text style = {styles.text}>{commands[command]}</Text>
+        <View style = {styles.track}>
+            <Animated.View style = {[styles.button, {transform: [{translateX:translation}]}]}>
+                <View
+                style = {[styles.touch, {backgroundColor: isFollowing ? 'green' : 'red'}]}
+                onStartShouldSetResponder={() => true}
+                onResponderStart={() => {
+                    startBreathing();
+                }}
+                onResponderMove={(event) => {
+                    const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
+                    if (radialDist > 75) {
+                        stopBreathing();
+                    } else {
+                        startBreathing();
+                    }
+                }}
+                onResponderRelease={() => {
+                    stopBreathing();
+                }}>
+                </View>
+            </Animated.View>
+        </View>
+        <Text style = {styles.text}>{count}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  track: {
+      height: '5%',
+      width: '80%',
+      borderRadius: 40,
+      backgroundColor: 'black',
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  text: {
+      fontSize: 24,
+      fontWeight: "bold",
+      padding: 100
+  },
+  button: {
+      width: 150,
+      height: 150,
+      borderRadius: 100
+  },
+  touch: {
+      width: 150,
+      height: 150,
+      borderRadius: 100
+  }
+});

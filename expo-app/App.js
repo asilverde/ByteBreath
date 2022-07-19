@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Slider from "./components/Slider.jsx"
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,19 +6,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Add Intructions</Text>
-      <Button
-        title="Begin 10 Breaths"
-        onPress={() => navigation.navigate('Meditate')}
-      />
+    <View style={styles.container}>
+      <Text style={styles.header}>10 BREATHS</Text>
+      <Text style={styles.text}>A simple, tactile approach to meditation. Track the green orb with your finger and synchronize your breath to movement.</Text>
+      <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.navigate('Meditate')}>
+          <Text style={{fontSize: 24, padding:10}}>Begin</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 function MeditateScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <View>
       <Slider
         endSession={(breathCount) => navigation.navigate('End', {breathCount})}
       />
@@ -29,17 +30,18 @@ function MeditateScreen({ navigation }) {
 
 function EndScreen({ route, navigation }) {
   const {breathCount} = route.params;
-  let endText = `You only completed ${breathCount} breath(s).`;
+  let endText = `Completed Breaths: ${breathCount}`;
   if (breathCount == 10) {
-    endText = "Congratulations! You have completed 10 breaths."
+    endText = "Congratulations! You completed 10 breaths."
   }
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{endText}</Text>
-      <Button
-        title="Restart"
-        onPress={() => navigation.navigate('Home')}
-      />
+    <View style={styles.container}>
+      <Text style={styles.text}>{endText}</Text>
+      <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.navigate('Home')}>
+          <Text style={{fontSize: 24, padding:10}}>Restart</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -66,11 +68,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection:"column",
+    justifyContent:'space-around',
+    padding: 40
+  },
+  header: {
+    fontSize: 32,
+    fontWeight: "bold",
+    textAlign: "center"
   },
   text: {
     fontSize: 20,
-    fontWeight: "bold",
-    padding: 20,
+    width: "60%",
+    textAlign: "center"
   },
+  button: {
+    width:100,
+    height:50,
+    alignItems: "center",
+    backgroundColor: "#b3effc",
+    borderRadius: 25
+  }
 });
