@@ -9,7 +9,7 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     track: {
-        height: '5%',
+        height: '3%',
         width: '80%',
         borderRadius: 40,
         backgroundColor: 'white',
@@ -25,11 +25,13 @@ export default StyleSheet.create({
     button: {
         width: 150,
         height: 150,
-        borderRadius: 100
+        borderRadius: 100,
     },
     touch: {
         width: 150,
         height: 150,
-        borderRadius: 100
+        borderRadius: 100,
+        borderColor: "white",
+        borderWidth: 5
     }
 });

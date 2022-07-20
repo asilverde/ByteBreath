@@ -1,34 +1,32 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Animated, Vibration, Text} from 'react-native';
+import {View, Animated, Vibration, Text, Dimensions} from 'react-native';
 import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
 
 function Slider( {endSession} ) {
+    const width = (Dimensions.get('window').width / 2) * 0.7;
+
+    // Game Mechanics
     const commands = ['INHALE', 'PAUSE', 'EXHALE', 'PAUSE'];
     const [command, updateCommand] = useState(0);
     const [count, updateCount] = useState(0);
-    
-    const [isFollowing, setIsFollowing] = useState(false);
     const [hasStarted, setHasStarted] = useState(false);
-    const translation = useRef(new Animated.Value(-225)).current;
-
+    const translation = useRef(new Animated.Value(-width)).current;
+    
+    // Track Finger Movement
+    const [isFollowing, setIsFollowing] = useState(false);
     const [timeOfRelease, setTimeOfRelease] = useState(0);
     const [releaseFlag, setReleaseFlag] = useState(false);
+
+    // End Game Transition Flags
     const [loseFlag, setLoseFlag] = useState(false);
     const [endFlag, setEndFlag] = useState(false);
 
+    // Audio Player for Inhale/Exhale Sounds
     const AudioPlayer = useRef(new Audio.Sound());
 
-    const calculateRadialDist = (x_dist, y_dist) => {
-        return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
-    }
 
-    const checkRelease = () => {
-        if (timeOfRelease != 0 && Date.now() - timeOfRelease > 5000) {
-            setLoseFlag(true);
-        }
-    }
-
+    // Called when user makes contact with circle
     const startBreathing = () => {
         checkRelease();
         setTimeOfRelease(0);
@@ -39,6 +37,7 @@ function Slider( {endSession} ) {
         setIsFollowing(true);
     }
 
+    // Called when user releases contact with circle
     const stopBreathing = () => {
         if (isFollowing && checkEndSession()) {
             setReleaseFlag(true);
@@ -50,6 +49,19 @@ function Slider( {endSession} ) {
         }
     }
 
+    // Determines if finger is within circle
+    const calculateRadialDist = (x_dist, y_dist) => {
+        return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
+    }
+
+    // Determines if finger has been lifted for more than 5 seconds
+    const checkRelease = () => {
+        if (timeOfRelease != 0 && Date.now() - timeOfRelease > 5000) {
+            setLoseFlag(true);
+        }
+    }
+    
+    // Increments counter if finger has not been lifted during the breath
     const updateBreathCount = () => {
         if (command == 3) {
             if (releaseFlag) {
@@ -60,6 +72,7 @@ function Slider( {endSession} ) {
         }
     }
 
+    // Calls navigation function from App.js to move screens if game over
     const checkEndSession = () => {
         if (endFlag) return false;
         else if (count == 10 || loseFlag) {
@@ -69,6 +82,8 @@ function Slider( {endSession} ) {
         }
         return true;
     }
+
+    // Functions for Inhale/Exhale sound playback
 
     async function playInhale() {
         await AudioPlayer.current.unloadAsync();
@@ -82,6 +97,7 @@ function Slider( {endSession} ) {
         await AudioPlayer.current.playAsync();
     }
         
+
     useEffect(() => {
         if (hasStarted && checkEndSession()) {
             checkRelease();
@@ -92,7 +108,7 @@ function Slider( {endSession} ) {
                 updateBreathCount();
             } else {
                 (command == 0) ? playInhale() : playExhale();
-                const target = (command == 0) ? 225 : -225;
+                const target = (command == 0) ? width : -width;
                 Animated.timing(translation, {
                   toValue: target,
                   useNativeDriver: false,
@@ -112,8 +128,9 @@ function Slider( {endSession} ) {
             <Text style = {styles.text}>{commands[command]}</Text>
             <View style = {styles.track}>
                 <Animated.View style = {[styles.button, {transform: [{translateX:translation}]}]}>
-                    <View
-                    style = {[styles.touch, {backgroundColor: isFollowing ? 'green' : 'red'}]}
+                    <View 
+                    style = {[styles.touch, { backgroundColor: hasStarted ? (isFollowing ? '#005e00' : '#8e0000') : 'black' }
+                    ]}
                     onStartShouldSetResponder={() => true}
                     onResponderStart={() => {
                         startBreathing();
