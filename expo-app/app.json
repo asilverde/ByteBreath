@@ -4,7 +4,7 @@
     "slug": "expo-app",
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sensei-breathing-logo.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

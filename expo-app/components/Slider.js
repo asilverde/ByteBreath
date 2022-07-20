@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {StyleSheet, View, Animated, Vibration, Text} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Animated, Vibration, Text} from 'react-native';
 import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
 
@@ -10,11 +10,12 @@ function Slider( {endSession} ) {
     
     const [isFollowing, setIsFollowing] = useState(false);
     const [hasStarted, setHasStarted] = useState(false);
-    const translation = useRef(new Animated.Value(-225)).current
+    const translation = useRef(new Animated.Value(-225)).current;
 
     const [timeOfRelease, setTimeOfRelease] = useState(0);
-    const [loseFlag, setLoseFlag] = useState(false);
     const [releaseFlag, setReleaseFlag] = useState(false);
+    const [loseFlag, setLoseFlag] = useState(false);
+    const [endFlag, setEndFlag] = useState(false);
 
     const AudioPlayer = useRef(new Audio.Sound());
 
@@ -60,8 +61,10 @@ function Slider( {endSession} ) {
     }
 
     const checkEndSession = () => {
-        if (count == 10 || loseFlag) {
+        if (endFlag) return false;
+        else if (count == 10 || loseFlag) {
             endSession(count);
+            setEndFlag(true);
             return false;
         }
         return true;
@@ -69,13 +72,13 @@ function Slider( {endSession} ) {
 
     async function playInhale() {
         await AudioPlayer.current.unloadAsync();
-        await AudioPlayer.current.loadAsync(require('../assets/INHALE.wav'), {}, true);
+        await AudioPlayer.current.loadAsync(require('../assets/sounds/inhale.wav'), {}, true);
         await AudioPlayer.current.playAsync();
     }
 
     async function playExhale() {
         await AudioPlayer.current.unloadAsync();
-        await AudioPlayer.current.loadAsync(require('../assets/EXHALE.wav'), {}, true);
+        await AudioPlayer.current.loadAsync(require('../assets/sounds/exhale.wav'), {}, true);
         await AudioPlayer.current.playAsync();
     }
         
@@ -116,7 +119,7 @@ function Slider( {endSession} ) {
                         startBreathing();
                     }}
                     onResponderMove={(event) => {
-                        if (event.nativeEvent.touches.length < 2) {
+                        if (!loseFlag && event.nativeEvent.touches.length < 2) {
                             const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
                             if (radialDist > 75) {
                                 stopBreathing();
@@ -126,7 +129,8 @@ function Slider( {endSession} ) {
                         }
                     }}
                     onResponderRelease={() => {
-                        stopBreathing();
+                        if (!loseFlag)
+                            stopBreathing();
                     }}>
                     </View>
                 </Animated.View>
