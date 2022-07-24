@@ -12,10 +12,10 @@ import { Audio } from 'expo-av';
 function HomeScreen({ navigation }) {
     const AudioPlayer = useRef(new Audio.Sound());
     AudioPlayer.current.loadAsync(require('./assets/sounds/short-bell.wav'), {}, true);
-
+    
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>10 BREATHS</Text>
+            <Text style={styles.header}>5 BREATHS</Text>
             <Text style={styles.text}>A simple, tactile approach to meditation. Track the green orb with your finger and synchronize your breath to movement.</Text>
             <TouchableOpacity
             style={styles.button}
@@ -50,7 +50,7 @@ function EndScreen({ route, navigation }) {
     const endText = `Completed Breaths: ${breathCount}`;
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>{(breathCount == 10) ? 'Good Job' : ''}</Text>
+            <Text style={styles.header}>{(breathCount == 5) ? 'Good Job' : ''}</Text>
             <Text style={styles.text}>{endText}</Text>
             <TouchableOpacity
             style={styles.button}

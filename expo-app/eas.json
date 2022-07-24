@@ -1,0 +1,24 @@
+{
+  "cli": {
+    "version": ">= 0.55.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "Sidajay01@gmail.com",
+        "ascAppId": "1636062959",
+        "appleTeamId": "C9WPT9X544"
+      }
+    }
+  }
+}

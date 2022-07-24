@@ -16,7 +16,6 @@ function Slider( {endSession} ) {
     // Track Finger Movement
     const [isFollowing, setIsFollowing] = useState(false);
     const [timeOfRelease, setTimeOfRelease] = useState(0);
-    const [releaseFlag, setReleaseFlag] = useState(false);
 
     // End Game Transition Flags
     const [loseFlag, setLoseFlag] = useState(false);
@@ -40,12 +39,11 @@ function Slider( {endSession} ) {
     // Called when user releases contact with circle
     const stopBreathing = () => {
         if (isFollowing && checkEndSession()) {
-            setReleaseFlag(true);
             setIsFollowing(false);
             if (timeOfRelease == 0) {
                 setTimeOfRelease(Date.now());
             }
-            Vibration.vibrate([0, 1000, 1000, 1000, 1000]);
+            Vibration.vibrate([0, 1000, 1000]);
         }
     }
 
@@ -56,26 +54,15 @@ function Slider( {endSession} ) {
 
     // Determines if finger has been lifted for more than 5 seconds
     const checkRelease = () => {
-        if (timeOfRelease != 0 && Date.now() - timeOfRelease > 5000) {
+        if (timeOfRelease != 0 && Date.now() - timeOfRelease > 3000) {
             setLoseFlag(true);
-        }
-    }
-    
-    // Increments counter if finger has not been lifted during the breath
-    const updateBreathCount = () => {
-        if (command == 3) {
-            if (releaseFlag) {
-                setReleaseFlag(false);
-            } else {
-                updateCount(count + 1);
-            } 
         }
     }
 
     // Calls navigation function from App.js to move screens if game over
     const checkEndSession = () => {
         if (endFlag) return false;
-        else if (count == 10 || loseFlag) {
+        else if (count == 5 || loseFlag) {
             endSession(count);
             setEndFlag(true);
             return false;
@@ -105,7 +92,9 @@ function Slider( {endSession} ) {
                 setTimeout(() => {
                     updateCommand((command + 1) % 4);
                 }, 2000);
-                updateBreathCount();
+                if (command == 3) {
+                    updateCount(count + 1);
+                }
             } else {
                 (command == 0) ? playInhale() : playExhale();
                 const target = (command == 0) ? width : -width;
