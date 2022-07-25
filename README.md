@@ -1,2 +1,2 @@
-# mediate
-A multi sensory assisted meditation app
+# Sensei Breathing
+A multi-sensory assisted meditation app

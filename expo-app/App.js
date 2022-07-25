@@ -16,7 +16,7 @@ function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>5 BREATHS</Text>
-            <Text style={styles.text}>A simple, tactile approach to meditation. Track the green orb with your finger and synchronize your breath to movement.</Text>
+            <Text style={styles.text}>A simple, tactile approach to meditation. Track the yellow orb with your finger and synchronize your breath to movement.</Text>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         width:100,
         height:50,
         alignItems: "center",
-        backgroundColor: "#b3effc",
+        backgroundColor: "#e1ad01",
         borderRadius: 25,
         padding: 10
     }

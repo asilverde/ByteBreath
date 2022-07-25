@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sensei Breathing",
     "slug": "sensei-breathing",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "landscape",
     "icon": "./assets/sensei-breathing-logo.jpg",
     "userInterfaceStyle": "light",
