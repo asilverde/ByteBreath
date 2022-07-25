@@ -118,7 +118,7 @@ function Slider( {endSession} ) {
             <View style = {styles.track}>
                 <Animated.View style = {[styles.button, {transform: [{translateX:translation}]}]}>
                     <View 
-                    style = {[styles.touch, { backgroundColor: hasStarted ? (isFollowing ? '#e1ad01' : '#ae3030') : 'black' }
+                    style = {[styles.touch, { backgroundColor: hasStarted ? (isFollowing ? '#eb9e21' : '#d6322f') : 'black' }
                     ]}
                     onStartShouldSetResponder={() => true}
                     onResponderStart={() => {
