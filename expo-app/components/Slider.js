@@ -123,7 +123,6 @@ function Slider( {endSession} ) {
                     ]}
                     onStartShouldSetResponder={() => true}
                     onTouchStart={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }}
                     onResponderStart={() => {
                         startBreathing();
