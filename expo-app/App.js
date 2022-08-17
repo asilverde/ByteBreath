@@ -9,8 +9,8 @@ import { Fontisto } from '@expo/vector-icons';
 import Slider from "./components/Slider.js"
 import { Audio } from 'expo-av';
 
-import { Provider } from 'react-redux'
-import store from "./redux/app-redux"
+// import { Provider } from 'react-redux'
+// import store from "./redux/app-redux"
 
 function HomeScreen({ navigation }) {
     const AudioPlayer = useRef(new Audio.Sound());
@@ -67,16 +67,14 @@ function EndScreen({ route, navigation }) {
 function App() {
     const Stack = createNativeStackNavigator();
     return (
-        <Provider store = {store}>
-            <NavigationContainer>
-                <Stack.Navigator initialRouteName="Home" 
-                screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Meditate" component={MeditateScreen} options={{gestureEnabled: false}}/>
-                    <Stack.Screen name="End" component={EndScreen} options={{gestureEnabled: false}}/>
-                </Stack.Navigator>
-            </NavigationContainer>
-        </Provider>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home" 
+            screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Meditate" component={MeditateScreen} options={{gestureEnabled: false}}/>
+                <Stack.Screen name="End" component={EndScreen} options={{gestureEnabled: false}}/>
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
 

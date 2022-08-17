@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Animated, Vibration, Text, Dimensions} from 'react-native';
 import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
+import * as Haptics from 'expo-haptics';
 
 function Slider( {endSession} ) {
     const width = (Dimensions.get('window').width / 2) * 0.7;
@@ -43,7 +44,7 @@ function Slider( {endSession} ) {
             if (timeOfRelease == 0) {
                 setTimeOfRelease(Date.now());
             }
-            Vibration.vibrate([0, 1000, 1000]);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Error);
         }
     }
 
@@ -121,6 +122,9 @@ function Slider( {endSession} ) {
                     style = {[styles.touch, { backgroundColor: hasStarted ? (isFollowing ? '#eb9e21' : '#d6322f') : 'black' }
                     ]}
                     onStartShouldSetResponder={() => true}
+                    onTouchStart={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    }}
                     onResponderStart={() => {
                         startBreathing();
                     }}

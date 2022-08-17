@@ -1,18 +1,18 @@
 import { configureStore , applyMiddleware } from 'redux'
 import { thunkMiddleware } from "redux-thunk"
 
-//Inital State
-const initialState = {
+// //Inital State
+// const initialState = {
 
-};
+// };
 
-//Reducers
+// //Reducers
 
-const reducer = (state = initialState, action) => {
+// const reducer = (state = initialState, action) => {
 
-};
+// };
 
-//Store
+// //Store
 
-const store = configureStore(reducer, applyMiddleware(thunkMiddleware));
-export { store } ;
+// const store = configureStore(reducer, applyMiddleware(thunkMiddleware));
+// export { store } ;
