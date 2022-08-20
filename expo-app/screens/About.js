@@ -6,7 +6,7 @@ import { Audio } from 'expo-av';
 
 import styles from './Screens.styles.js';
 
-function Settings({ navigation }) {
+function About({ navigation }) {
     return (
         <View style={styles.container}>
             <TouchableOpacity 
@@ -15,9 +15,9 @@ function Settings({ navigation }) {
             }>
                 X
             </TouchableOpacity>
-            <Text style={styles.header}>Settings</Text>
+            <Text style={styles.header}>About</Text>
         </View>
     );
 }
 
-export default Settings
+export default About
