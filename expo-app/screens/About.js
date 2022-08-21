@@ -13,7 +13,7 @@ function About({ navigation }) {
             style={styles.button}
             onPress={() => { navigation.navigate('Home') }
             }>
-                X
+                <Text>X</Text>
             </TouchableOpacity>
             <Text style={styles.header}>About</Text>
         </View>

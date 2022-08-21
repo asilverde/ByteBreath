@@ -13,8 +13,11 @@ function Settings({ navigation }) {
             style={styles.button}
             onPress={() => { navigation.navigate('Home') }
             }>
-                X
+                <Text>X</Text>
             </TouchableOpacity>
+            <View style={styles.settingsPanel}>
+                
+            </View>
             <Text style={styles.header}>Settings</Text>
         </View>
     );

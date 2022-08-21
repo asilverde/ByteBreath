@@ -12,9 +12,7 @@ function Home({ navigation }) {
     
     return (
         <View style={styles.container}>
-            
             <Text style={styles.header}>5 BREATHS</Text>
-            <Text style={styles.text}>A simple, tactile approach to meditation. Track the yellow orb with your finger and synchronize your breath to movement.</Text>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -23,6 +21,14 @@ function Home({ navigation }) {
               }
             }>
                 <AntDesign name="arrowright" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+                navigation.navigate('About');
+              }
+            }>
+                <Text>About</Text>
             </TouchableOpacity>
             <TouchableOpacity
             style={styles.button}

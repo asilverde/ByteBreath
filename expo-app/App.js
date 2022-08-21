@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./screens/Home.js"
 import Game from "./screens/Game.js"
 import End from "./screens/End.js"
+import Settings from "./screens/Settings.js"
+import About from "./screens/About.js"
 
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
@@ -23,6 +25,8 @@ function App() {
                         <Stack.Screen name="Home" component={Home} />
                         <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="About" component={About} options={{gestureEnabled: false}}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </PersistGate>
