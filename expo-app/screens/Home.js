@@ -30,7 +30,7 @@ function Home({ navigation }) {
                 navigation.navigate('Settings');
               }
             }>
-                Settings
+                <Text>Settings</Text>
             </TouchableOpacity>
         </View>
     );

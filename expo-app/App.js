@@ -8,13 +8,15 @@ import End from "./screens/End.js"
 
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
-import store from "./redux/app-redux"
+// import store from "./redux/app-redux"
+
+import { store, persistor } from './redux/state/store';
 
 function App() {
     const Stack = createNativeStackNavigator();
     return (
-        <Provider>
-            <PersistGate>
+        <Provider store={store}>
+            <PersistGate persistor={persistor} loading={null}>
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home" 
                     screenOptions={{ headerShown: false }}>
