@@ -9,6 +9,11 @@ export default StyleSheet.create({
         justifyContent:'space-around',
         padding: 40
     },
+    row: {
+        fontSize: 20,
+        textAlign: "center",
+        height: "15%"
+    },
     header: {
         fontSize: 32,
         fontWeight: "bold",
