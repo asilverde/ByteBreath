@@ -15,7 +15,7 @@ function About({ navigation }) {
             }>
                 <Text>X</Text>
             </TouchableOpacity>
-            <Text style={styles.header}>About</Text>
+            <Text style={styles.title}>About</Text>
         </View>
     );
 }

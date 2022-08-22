@@ -3,7 +3,7 @@
     "name": "ByteBreathe",
     "slug": "bytebreathe",
     "version": "1.0.0",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "icon": "./assets/sunsation-logo.jpg",
     "userInterfaceStyle": "light",
     "splash": {

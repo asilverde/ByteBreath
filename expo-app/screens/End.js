@@ -7,7 +7,7 @@ function Win({ route, navigation }) {
     const endText = `Completed Breaths: ${breathCount}`;
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>{(breathCount == 5) ? 'Good Job' : ''}</Text>
+            <Text style={styles.title}>{(breathCount == 5) ? 'Good Job' : ''}</Text>
             <Text style={styles.text}>{endText}</Text>
             <TouchableOpacity
             style={styles.button}

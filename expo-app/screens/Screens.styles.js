@@ -9,12 +9,17 @@ export default StyleSheet.create({
         justifyContent:'space-around',
         padding: 40
     },
+    header: {
+        backgroundColor: 'black',
+        flexDirection:"row",
+        justifyContent:'space-around'
+    },
     row: {
         fontSize: 20,
         textAlign: "center",
         height: "15%"
     },
-    header: {
+    title: {
         fontSize: 32,
         fontWeight: "bold",
         textAlign: "center",

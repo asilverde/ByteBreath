@@ -12,32 +12,34 @@ function Home({ navigation }) {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>5 BREATHS</Text>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-                AudioPlayer.current.playFromPositionAsync(0);
-                navigation.navigate('Game');
-              }
-            }>
-                <AntDesign name="arrowright" size={30} color="black" />
-            </TouchableOpacity>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
                 navigation.navigate('About');
-              }
+            }
             }>
-                <Text>About</Text>
+                <Text>?</Text>
             </TouchableOpacity>
             <TouchableOpacity
             style={styles.button}
             onPress={() => {
                 navigation.navigate('Settings');
-              }
+            }
             }>
                 <Text>Settings</Text>
             </TouchableOpacity>
+            <View style={styles.container}>
+                <Text style={styles.title}>BYTE BREATH</Text>
+                <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                    AudioPlayer.current.playFromPositionAsync(0);
+                    navigation.navigate('Game');
+                }
+                }>
+                    <AntDesign name="arrowright" size={30} color="black" />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
