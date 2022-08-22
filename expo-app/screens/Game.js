@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import Slider from "../components/Slider.js"
+import MovingButton from "../components/MovingButton"
 import { Audio } from 'expo-av';
 
 import styles from './Screens.styles.js';
@@ -11,7 +11,7 @@ function Game({ navigation }) {
 
     return (
         <View>
-            <Slider
+            <MovingButton
             endSession={(breathCount) => {
               AudioPlayer.current.playFromPositionAsync(0);
               navigation.navigate('End', {breathCount});

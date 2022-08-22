@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateSettings } from './redux/actions/breathSettings';
+import { updateSettings } from '../redux/actions/breathSettings';
 import { AntDesign } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 
@@ -32,14 +32,17 @@ function Settings({ navigation }) {
         <View style={styles.container}>
             <TouchableOpacity 
             style={styles.button}
-            onPress={() => { navigation.navigate('Home') }
+            onPress={() => { 
+                update();
+                navigation.navigate('Home');
+            }
             }>
                 <Text>X</Text>
             </TouchableOpacity>
             <View style={styles.row}>
                 <Text>MODE:</Text>
-                <TouchableOpacity 
-                style={styles.button}
+                <TouchableOpacity
+                style={styles.button} 
                 onPress={() => { setMode('BOX') }
                 }>
                     <Text>BOX</Text>
@@ -50,7 +53,7 @@ function Settings({ navigation }) {
                 }>
                     <Text>CIRCLE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                 style={styles.button}
                 onPress={() => { setMode('LINE') }
                 }>
