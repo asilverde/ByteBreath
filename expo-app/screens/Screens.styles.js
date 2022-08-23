@@ -38,5 +38,14 @@ export default StyleSheet.create({
         backgroundColor: "#eb9e21",
         borderRadius: 25,
         padding: 10
+    },
+    smallButton: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width:40,
+        height:40,
+        backgroundColor: "#eb9e21",
+        borderRadius: 25,
     }
 });

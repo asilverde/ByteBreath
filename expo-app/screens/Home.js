@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather} from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 
 import styles from './Screens.styles.js';
@@ -12,22 +12,24 @@ function Home({ navigation }) {
     
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-                navigation.navigate('About');
-            }
-            }>
-                <Text>?</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-                navigation.navigate('Settings');
-            }
-            }>
-                <Text>Settings</Text>
-            </TouchableOpacity>
+            <View style={styles.header}>
+                <TouchableOpacity
+                style={styles.smallButton}
+                onPress={() => {
+                    navigation.navigate('About');
+                }
+                }>
+                    <AntDesign name="questioncircle" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                style={styles.smallButton}
+                onPress={() => {
+                    navigation.navigate('Settings');
+                }
+                }>
+                    <Feather name="settings" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
             <View style={styles.container}>
                 <Text style={styles.title}>BYTE BREATH</Text>
                 <TouchableOpacity
