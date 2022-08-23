@@ -1,17 +1,20 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    container: {
+    header: {
         flex: 1,
+        maxHeight: "15%",
+        width: "100%",
+        backgroundColor: 'black',
+        flexDirection:"row",
+        alignItems: 'center',
+        justifyContent:'flex-end',
+    },
+    container: {
+        flex: 2,
         backgroundColor: 'black',
         alignItems: 'center',
         flexDirection:"column",
-        justifyContent:'space-around',
-        padding: 40
-    },
-    header: {
-        backgroundColor: 'black',
-        flexDirection:"row",
         justifyContent:'space-around'
     },
     row: {
@@ -46,6 +49,6 @@ export default StyleSheet.create({
         width:40,
         height:40,
         backgroundColor: "#eb9e21",
-        borderRadius: 25,
+        borderRadius: 25
     }
 });

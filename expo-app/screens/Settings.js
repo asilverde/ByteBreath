@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSettings } from '../redux/actions/breathSettings';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 
 import styles from './Screens.styles.js';
@@ -30,16 +30,18 @@ function Settings({ navigation }) {
     }
     return (
         <View style={styles.container}>
-            <TouchableOpacity 
-            style={styles.button}
-            onPress={() => { 
-                update();
-                navigation.navigate('Home');
-            }
-            }>
-                <Text>X</Text>
-            </TouchableOpacity>
-            <View style={styles.row}>
+            <View style={[styles.header, {justifyContent:'flex-start'}]}>
+                <TouchableOpacity 
+                style={styles.smallButton}
+                onPress={() => { 
+                    update();
+                    navigation.navigate('Home');
+                }
+                }>
+                    <MaterialIcons name="cancel" size={30} color="black" />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.container}>
                 <Text>MODE:</Text>
                 <TouchableOpacity
                 style={styles.button} 

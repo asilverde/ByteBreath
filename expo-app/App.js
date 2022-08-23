@@ -21,7 +21,7 @@ function App() {
             <PersistGate persistor={persistor} loading={null}>
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home" 
-                    screenOptions={{ headerShown: false }}>
+                    screenOptions={{ headerShown: false, cardOverlayEnabled: true}}>
                         <Stack.Screen name="Home" component={Home} />
                         <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
