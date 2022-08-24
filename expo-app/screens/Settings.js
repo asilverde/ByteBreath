@@ -41,25 +41,48 @@ function Settings({ navigation }) {
                     <MaterialIcons name="cancel" size={30} color="black" />
                 </TouchableOpacity>
             </View>
-            <View style={styles.container}>
-                <Text>MODE:</Text>
+            <View style={styles.row}>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.text} >MODE:</Text>
                 <TouchableOpacity
-                style={styles.button} 
+                style={styles.smallButton} 
                 onPress={() => { setMode('BOX') }
                 }>
                     <Text>BOX</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                style={styles.button}
+                style={styles.smallButton}
                 onPress={() => { setMode('CIRCLE') }
                 }>
                     <Text>CIRCLE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                style={styles.button}
+                style={styles.smallButton}
                 onPress={() => { setMode('LINE') }
                 }>
                     <Text>LINE</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.text} >BACKGROUND:</Text>
+                <TouchableOpacity
+                style={styles.smallButton} 
+                onPress={() => { setBackground('SPACE') }
+                }>
+                    <Text>SPACE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={styles.smallButton}
+                onPress={() => { setBackground('FOREST') }
+                }>
+                    <Text>FOREST</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                style={styles.smallButton}
+                onPress={() => { setBackground('CLOUDS') }
+                }>
+                    <Text>CLOUDS</Text>
                 </TouchableOpacity>
             </View>
         </View>

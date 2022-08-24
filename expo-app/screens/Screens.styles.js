@@ -14,13 +14,15 @@ export default StyleSheet.create({
         flex: 2,
         backgroundColor: 'black',
         alignItems: 'center',
-        flexDirection:"column",
-        justifyContent:'space-around'
+        flexDirection:"column"
     },
     row: {
-        fontSize: 20,
-        textAlign: "center",
-        height: "15%"
+        flex: 1,
+        maxHeight: "15%",
+        width: "100%",
+        backgroundColor: 'black',
+        flexDirection:"row",
+        alignItems: 'center'
     },
     title: {
         fontSize: 32,
@@ -38,6 +40,7 @@ export default StyleSheet.create({
         width:100,
         height:50,
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#eb9e21",
         borderRadius: 25,
         padding: 10
