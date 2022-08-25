@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSettings } from '../redux/actions/breathSettings';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import {Picker} from '@react-native-picker/picker';
 
 import styles from './Screens.styles.js';
 
@@ -40,6 +41,28 @@ function Settings({ navigation }) {
                 }>
                     <MaterialIcons name="cancel" size={30} color="black" />
                 </TouchableOpacity>
+            </View>
+            <View style={{ display: 'flex', flexDirection: "row" }}>
+                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
+                    <PickerIOS style={{ flex: 1 }}>
+                    <PickerIOSItem value={1} label="0" />
+                    <PickerIOSItem value={2} label="1" />
+                    <PickerIOSItem value={3} label="2" />
+                    <PickerIOSItem value={4} label="3" />
+                    <PickerIOSItem value={5} label="4" />
+                    </PickerIOS>
+                    <Text>Apples</Text>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
+                    <PickerIOS style={{ flex: 1 }}>
+                    <PickerIOSItem value={1} label="0" />
+                    <PickerIOSItem value={2} label="1" />
+                    <PickerIOSItem value={3} label="2" />
+                    <PickerIOSItem value={4} label="3" />
+                    <PickerIOSItem value={5} label="4" />
+                    </PickerIOS>
+                    <Text>pears</Text>
+                </View>
             </View>
             <View style={styles.row}>
             </View>
