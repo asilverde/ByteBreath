@@ -20,7 +20,7 @@ export default StyleSheet.create({
         flex: 1,
         maxHeight: "15%",
         width: "100%",
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         flexDirection:"row",
         alignItems: 'center'
     },

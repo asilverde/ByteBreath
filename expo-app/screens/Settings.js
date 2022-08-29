@@ -42,26 +42,34 @@ function Settings({ navigation }) {
                     <MaterialIcons name="cancel" size={30} color="black" />
                 </TouchableOpacity>
             </View>
-            <View style={{ display: 'flex', flexDirection: "row" }}>
+            <View style={styles.row}>
                 <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
-                    <PickerIOS style={{ flex: 1 }}>
-                    <PickerIOSItem value={1} label="0" />
-                    <PickerIOSItem value={2} label="1" />
-                    <PickerIOSItem value={3} label="2" />
-                    <PickerIOSItem value={4} label="3" />
-                    <PickerIOSItem value={5} label="4" />
-                    </PickerIOS>
-                    <Text>Apples</Text>
+                    <Picker style={{ flex: 1 }}
+                    selectedValue={inhale}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setInhale(itemValue)
+                    }>
+                        <Picker.Item value={1} label="1" />
+                        <Picker.Item value={2} label="2" />
+                        <Picker.Item value={3} label="3" />
+                        <Picker.Item value={4} label="4" />
+                        <Picker.Item value={5} label="5" />
+                    </Picker>
+                    <Text>INHALE</Text>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
-                    <PickerIOS style={{ flex: 1 }}>
-                    <PickerIOSItem value={1} label="0" />
-                    <PickerIOSItem value={2} label="1" />
-                    <PickerIOSItem value={3} label="2" />
-                    <PickerIOSItem value={4} label="3" />
-                    <PickerIOSItem value={5} label="4" />
-                    </PickerIOS>
-                    <Text>pears</Text>
+                    <Picker style={{ flex: 1 }}
+                    selectedValue={exhale}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setExhale(itemValue)
+                    }>
+                        <Picker.Item value={1} label="1" />
+                        <Picker.Item value={2} label="2" />
+                        <Picker.Item value={3} label="3" />
+                        <Picker.Item value={4} label="4" />
+                        <Picker.Item value={5} label="5" />
+                    </Picker>
+                    <Text>EXHALE</Text>
                 </View>
             </View>
             <View style={styles.row}>
