@@ -43,38 +43,6 @@ function Settings({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.row}>
-                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
-                    <Picker style={{ flex: 1 }}
-                    selectedValue={inhale}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setInhale(itemValue)
-                    }>
-                        <Picker.Item value={1} label="1" />
-                        <Picker.Item value={2} label="2" />
-                        <Picker.Item value={3} label="3" />
-                        <Picker.Item value={4} label="4" />
-                        <Picker.Item value={5} label="5" />
-                    </Picker>
-                    <Text>INHALE</Text>
-                </View>
-                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
-                    <Picker style={{ flex: 1 }}
-                    selectedValue={exhale}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setExhale(itemValue)
-                    }>
-                        <Picker.Item value={1} label="1" />
-                        <Picker.Item value={2} label="2" />
-                        <Picker.Item value={3} label="3" />
-                        <Picker.Item value={4} label="4" />
-                        <Picker.Item value={5} label="5" />
-                    </Picker>
-                    <Text>EXHALE</Text>
-                </View>
-            </View>
-            <View style={styles.row}>
-            </View>
-            <View style={styles.row}>
                 <Text style={styles.text} >MODE:</Text>
                 <TouchableOpacity
                 style={styles.smallButton} 
@@ -115,6 +83,61 @@ function Settings({ navigation }) {
                 }>
                     <Text>CLOUDS</Text>
                 </TouchableOpacity>
+            </View>
+            <View style={styles.row}>
+                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
+                    <Picker style={{ flex: 1 }}
+                    prompt="INHALE"
+                    selectedValue={inhale}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setInhale(itemValue)
+                    }>
+                        <Picker.Item value={1} label="1" />
+                        <Picker.Item value={2} label="2" />
+                        <Picker.Item value={3} label="3" />
+                        <Picker.Item value={4} label="4" />
+                        <Picker.Item value={5} label="5" />
+                        <Picker.Item value={6} label="6" />
+                        <Picker.Item value={7} label="7" />
+                        <Picker.Item value={8} label="8" />
+                        <Picker.Item value={9} label="9" />
+                        <Picker.Item value={10} label="10" />
+                    </Picker>
+                    <Text>EXHALE</Text>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
+                    <Picker style={{ flex: 1 }}
+                    selectedValue={exhale}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setExhale(itemValue)
+                    }>
+                        <Picker.Item value={1} label="1" />
+                        <Picker.Item value={2} label="2" />
+                        <Picker.Item value={3} label="3" />
+                        <Picker.Item value={4} label="4" />
+                        <Picker.Item value={5} label="5" />
+                        <Picker.Item value={6} label="6" />
+                        <Picker.Item value={7} label="7" />
+                        <Picker.Item value={8} label="8" />
+                        <Picker.Item value={9} label="9" />
+                        <Picker.Item value={10} label="10" />
+                    </Picker>
+                    <Text>EXHALE</Text>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row',alignItems: 'center' }}>
+                    <Picker style={{ flex: 1 }}
+                    selectedValue={pause}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setPause(itemValue)
+                    }>
+                        <Picker.Item value={1} label="1" />
+                        <Picker.Item value={2} label="2" />
+                        <Picker.Item value={3} label="3" />
+                        <Picker.Item value={4} label="4" />
+                        <Picker.Item value={5} label="5" />
+                    </Picker>
+                    <Text>PAUSE</Text>
+                </View>
             </View>
         </View>
     );
