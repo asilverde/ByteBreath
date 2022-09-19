@@ -1,2 +1,2 @@
-# Sensei Breathing
+# ByteBreath
 A multi-sensory assisted meditation app

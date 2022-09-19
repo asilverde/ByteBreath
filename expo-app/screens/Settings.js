@@ -46,19 +46,19 @@ function Settings({ navigation }) {
                 <Text style={styles.text} >MODE:</Text>
                 <TouchableOpacity
                 style={styles.smallButton} 
-                onPress={() => { setMode('BOX') }
+                onPress={() => { setMode('square') }
                 }>
                     <Text>BOX</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                 style={styles.smallButton}
-                onPress={() => { setMode('CIRCLE') }
+                onPress={() => { setMode('circle') }
                 }>
                     <Text>CIRCLE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                 style={styles.smallButton}
-                onPress={() => { setMode('LINE') }
+                onPress={() => { setMode('line') }
                 }>
                     <Text>LINE</Text>
                 </TouchableOpacity>
