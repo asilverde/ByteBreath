@@ -24,18 +24,25 @@ function MovingButton() {
     const width = (Dimensions.get('window').width / 2) * 0.7;
     const translationX = useRef(new Animated.Value(-width)).current;
     const translationY = useRef(new Animated.Value(-height)).current;
-
+    const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
 
+    // Called when user makes contact with circle
+    const startBreathing = () => {
+        setIsFollowing(true);
+    }
+
+    // Called when user releases contact with circle
+    const stopBreathing = () => {
+    }
+
     useEffect(() => {
-        for (coor in options[settings.mode]["transformations"]) {
-            Animated.timing(props.animations[a], {
-                toValue: props.animations[a],
-                useNativeDriver: false,
-                duration: props.time[a],
-            }).start();
-        }
+        Animated.timing(translationX, {
+            toValue: width,
+            useNativeDriver: false,
+            duration: 3000,
+        }).start();
     }, []);
 
     return (
@@ -50,21 +57,20 @@ function MovingButton() {
                     onTouchStart={() => {
                     }}
                     onResponderStart={() => {
-                        startBreathing();
+                        setIsFollowing(true);
                     }}
                     onResponderMove={(event) => {
                         if (!loseFlag && event.nativeEvent.touches.length < 2) {
                             const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
                             if (radialDist > 75) {
-                                stopBreathing();
+                                setIsFollowing(false);
                             } else {
-                                startBreathing();
+                                setIsFollowing(true);
                             }
                         }
                     }}
                     onResponderRelease={() => {
-                        if (!loseFlag)
-                            stopBreathing();
+                        setIsFollowing(false);
                     }}>
                     </View>
                 </Animated.View>
