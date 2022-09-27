@@ -23,13 +23,13 @@ export default StyleSheet.create({
         color: 'white'
     },
     button: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
         borderRadius: 100,
     },
     touch: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
         borderRadius: 100,
         borderColor: "white",
         borderWidth: 5

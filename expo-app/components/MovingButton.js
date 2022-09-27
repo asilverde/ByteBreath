@@ -22,11 +22,12 @@ var options =
 function MovingButton() {
     const height = (Dimensions.get('window').height / 2) * 0.7;
     const width = (Dimensions.get('window').width / 2) * 0.7;
-    const translationX = useRef(new Animated.Value(-width)).current;
-    const translationY = useRef(new Animated.Value(-height)).current;
+    const translation = useRef(new Animated.ValueXY({x:-width, y:height})).current;
     const [isFollowing, setIsFollowing] = useState(false);
+    const [path, setPath] = useState([]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
+    const square_path = [-height, width, height, -width]
 
     // Called when user makes contact with circle
     const startBreathing = () => {
@@ -35,39 +36,48 @@ function MovingButton() {
 
     // Called when user releases contact with circle
     const stopBreathing = () => {
+        translation.stopAnimation(({ value }) =>
+            console.log("Final Value: " + value)
+        )
     }
 
     useEffect(() => {
-        Animated.timing(translationX, {
-            toValue: width,
-            useNativeDriver: false,
-            duration: 3000,
-        }).start();
-    }, []);
+        if(isFollowing) {
+            if (path.length != 0) {
+                if (path.length % 2 == 0) {
+                    Animated.timing(translation.y, {
+                        toValue: path[0],
+                        useNativeDriver: false,
+                        duration: 3000,
+                    }).start(() => {setPath(path.slice(1))});
+                } else {
+                    Animated.timing(translation.x, {
+                        toValue: path[0],
+                        useNativeDriver: false,
+                        duration: 3000,
+                    }).start(() => {setPath(path.slice(1))});
+                }
+            } else {
+                setPath(square_path);
+            }
+        }
+    }, [isFollowing, path]);
 
     return (
         <View style = {styles.container}>
-            <Text style = {styles.text}>{commands[command]}</Text>
-            <View style = {styles.track}>
-                <Animated.View style = {[styles.button, {transform: [{translateX:translationX, translateY:translationY}]}]}>
+            <View>
+                <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                     <View 
-                    style = {[styles.touch, { backgroundColor: hasStarted ? (isFollowing ? '#eb9e21' : '#d6322f') : 'black' }
+                    style = {[styles.touch, { backgroundColor: (isFollowing ? '#eb9e21' : '#d6322f') }
                     ]}
                     onStartShouldSetResponder={() => true}
                     onTouchStart={() => {
+                        setIsFollowing(true);
                     }}
                     onResponderStart={() => {
                         setIsFollowing(true);
                     }}
                     onResponderMove={(event) => {
-                        if (!loseFlag && event.nativeEvent.touches.length < 2) {
-                            const radialDist = calculateRadialDist(event.nativeEvent.locationX - 75, event.nativeEvent.locationY - 75);
-                            if (radialDist > 75) {
-                                setIsFollowing(false);
-                            } else {
-                                setIsFollowing(true);
-                            }
-                        }
                     }}
                     onResponderRelease={() => {
                         setIsFollowing(false);
@@ -75,7 +85,6 @@ function MovingButton() {
                     </View>
                 </Animated.View>
             </View>
-            <Text style = {styles.text}>{count}</Text>
         </View>
     )
 }
