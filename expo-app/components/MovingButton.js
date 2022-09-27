@@ -4,21 +4,6 @@ import {View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native'
 import styles from './Slider.style.js';
 import * as Haptics from 'expo-haptics';
 
-var options = 
-{
-    "square" :
-    {
-        "transformations" : [[0, -1], [-1, 0], [0, -1], [-1, 0]]
-    },
-    "line" :
-    {
-        "transformations" : [[0, -1], [0, 0], [0, -1], [0, 0]]
-    },
-    "circle" :
-    {
-        "transformations" : [[0, -1], [0, 0], [0, -1], [0, 0]]
-    }
-}
 // Single function to handle line, box, and circle breathing
 function MovingButton() {
     const height = (Dimensions.get('window').height / 2) * 0.6;
@@ -28,7 +13,28 @@ function MovingButton() {
     const [path, setPath] = useState([]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
-    const square_path = [[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]
+
+    var options = 
+    {
+        "square" :
+        {
+            "transformations" : [[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]
+        },
+        "line" :
+        {
+            "transformations" : [[translation.y, -height], [translation.x, -width], [translation.y, height], [translation.x, -width]]
+        },
+        "circle" :
+        {
+            "transformations" : [[0, -1], [0, 0], [0, -1], [0, 0]]
+        }
+    }
+    let current_path = [];
+    if (settings.mode == "square") {
+        current_path = options["square"]["transformations"];
+    } else {
+        current_path = options["line"]["transformations"];
+    }
 
     // Called when user makes contact with circle
     const startBreathing = () => {
@@ -37,16 +43,23 @@ function MovingButton() {
     const buildPath = () => {
         output = []
         for (let i = 0; i < settings.inhale; i++) {
-            output.push([square_path[0][0], (2 * (i + 1) * square_path[0][1] / settings.inhale) - square_path[0][1]]);
+            output.push([current_path[0][0], (2 * (i + 1) * current_path[0][1] / settings.inhale) - current_path[0][1]]);
         }
         for (let i = 0; i < settings.pause; i++) {
-            output.push([square_path[1][0], (2 * (i + 1) * square_path[1][1] / settings.pause) - square_path[1][1]]);
+            if (current_path[1][1] == -width) {
+                output.push([current_path[1][0], current_path[1][1]]);
+            } else {
+                output.push([current_path[1][0], (2 * (i + 1) * current_path[1][1] / settings.pause) - current_path[1][1]]);
+            }
         }
         for (let i = 0; i < settings.exhale; i++) {
-            output.push([square_path[2][0], (2 * (i + 1) * square_path[2][1] / settings.exhale) - square_path[2][1]]);
+            output.push([current_path[2][0], (2 * (i + 1) * current_path[2][1] / settings.exhale) - current_path[2][1]]);
         }
         for (let i = 0; i < settings.pause; i++) {
-            output.push([square_path[3][0], (2 * (i + 1) * square_path[3][1] / settings.pause) - square_path[3][1]]);
+            if (current_path[3][1] == -width) {
+                output.push([current_path[3][0], current_path[3][1]]);
+            } else {
+                output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]);            }
         }
         console.log(output);
         setPath(output);
