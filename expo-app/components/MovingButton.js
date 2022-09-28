@@ -16,13 +16,13 @@ function MovingButton() {
 
     var options = 
     {
-        "square" :
+        "box" :
         {
             "transformations" : [[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]
         },
         "line" :
         {
-            "transformations" : [[translation.y, -height], [translation.x, -width], [translation.y, height], [translation.x, -width]]
+            "transformations" : [[translation.y, -height], [translation.x, 0], [translation.y, height], [translation.x, 0]]
         },
         "circle" :
         {
@@ -30,10 +30,11 @@ function MovingButton() {
         }
     }
     let current_path = [];
-    if (settings.mode == "square") {
-        current_path = options["square"]["transformations"];
+    if (settings.mode == "box") {
+        current_path = options["box"]["transformations"];
     } else {
         current_path = options["line"]["transformations"];
+        translation.x.setValue(0);
     }
 
     // Called when user makes contact with circle
@@ -46,8 +47,8 @@ function MovingButton() {
             output.push([current_path[0][0], (2 * (i + 1) * current_path[0][1] / settings.inhale) - current_path[0][1]]);
         }
         for (let i = 0; i < settings.pause; i++) {
-            if (current_path[1][1] == -width) {
-                output.push([current_path[1][0], current_path[1][1]]);
+            if (current_path[1][1] == 0) {
+                output.push([current_path[1][0], 0]);
             } else {
                 output.push([current_path[1][0], (2 * (i + 1) * current_path[1][1] / settings.pause) - current_path[1][1]]);
             }
@@ -56,10 +57,11 @@ function MovingButton() {
             output.push([current_path[2][0], (2 * (i + 1) * current_path[2][1] / settings.exhale) - current_path[2][1]]);
         }
         for (let i = 0; i < settings.pause; i++) {
-            if (current_path[3][1] == -width) {
-                output.push([current_path[3][0], current_path[3][1]]);
+            if (current_path[3][1] == 0) {
+                output.push([current_path[3][0], 0]);
             } else {
-                output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]);            }
+                output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]); 
+            }
         }
         console.log(output);
         setPath(output);
@@ -67,9 +69,6 @@ function MovingButton() {
 
     // Called when user releases contact with circle
     const stopBreathing = () => {
-        translation.stopAnimation(({ value }) =>
-            console.log("Final Value: " + value)
-        )
     }
 
     useEffect(() => {
@@ -100,26 +99,24 @@ function MovingButton() {
 
     return (
         <View style = {styles.container}>
-            <View>
-                <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
-                    <View 
-                    style = {[styles.touch, { backgroundColor: (isFollowing ? '#eb9e21' : '#d6322f') }
-                    ]}
-                    onStartShouldSetResponder={() => true}
-                    onTouchStart={() => {
-                        setIsFollowing(true);
-                    }}
-                    onResponderStart={() => {
-                        setIsFollowing(true);
-                    }}
-                    onResponderMove={(event) => {
-                    }}
-                    onResponderRelease={() => {
-                        setIsFollowing(false);
-                    }}>
-                    </View>
-                </Animated.View>
-            </View>
+            <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
+                <View 
+                style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
+                ]}
+                onStartShouldSetResponder={() => true}
+                onTouchStart={() => {
+                    setIsFollowing(true);
+                }}
+                onResponderStart={() => {
+                    setIsFollowing(true);
+                }}
+                onResponderMove={(event) => {
+                }}
+                onResponderRelease={() => {
+                    setIsFollowing(false);
+                }}>
+                </View>
+            </Animated.View>
         </View>
     )
 }

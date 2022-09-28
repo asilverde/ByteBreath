@@ -12,40 +12,85 @@ function Home({ navigation }) {
     
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                style={styles.smallButton}
+            <TouchableOpacity
+                style={{
+                    position: "absolute",
+                    left: "75.85%",
+                    right: "14.49%",
+                    top: "1.67%",
+                    bottom: "93.86%",
+                    
+                    background: "#000000"
+                }}
                 onPress={() => {
                     navigation.navigate('About');
                 }
                 }>
-                    <AntDesign name="questioncircle" size={24} color="black" />
+                    <AntDesign name="questioncircle" size={24} color="gray" />
                 </TouchableOpacity>
                 <TouchableOpacity
-                style={styles.smallButton}
+                style={{
+                    position: "absolute",
+                    left: "88.19%",
+                    right: "3.16%",
+                    top: "1.79%",
+                    bottom: "93.97%",
+                    
+                    background: "#000000"
+                }}
                 onPress={() => {
                     navigation.navigate('Settings');
                 }
                 }>
-                    <Feather name="settings" size={24} color="black" />
+                    <Feather name="settings" size={24} color="gray" />
                 </TouchableOpacity>
+            <View style={styles.titleBox}>
+                <Text style={styles.titleText}>byte breath</Text>
             </View>
-            <View style={styles.container}>
-                <Text style={styles.title}>BYTE BREATH</Text>
-                <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                    AudioPlayer.current.playFromPositionAsync(0);
-                    navigation.navigate('Game');
-                }
-                }>
-                    <AntDesign name="arrowright" size={30} color="black" />
-                </TouchableOpacity>
+            <View style={styles.bodyBox}>
+                <Text style={styles.bodyText}>short tactile breathing to relieve anxiety</Text>
             </View>
+            <TouchableOpacity 
+            style={styles.beginButton}
+            onPress={() => {
+                navigation.navigate('Game');
+            }}>
+                <Text style={styles.beginText}>begin</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 export default Home
 
+// <View style={styles.header}>
+//                 <TouchableOpacity
+//                 style={styles.smallButton}
+//                 onPress={() => {
+//                     navigation.navigate('About');
+//                 }
+//                 }>
+//                     <AntDesign name="questioncircle" size={24} color="black" />
+//                 </TouchableOpacity>
+//                 <TouchableOpacity
+//                 style={styles.smallButton}
+//                 onPress={() => {
+//                     navigation.navigate('Settings');
+//                 }
+//                 }>
+//                     <Feather name="settings" size={24} color="black" />
+//                 </TouchableOpacity>
+//             </View>
+//             <View style={styles.container}>
+//                 <Text style={styles.title}>BYTE BREATH</Text>
+//                 <TouchableOpacity
+//                 style={styles.button}
+//                 onPress={() => {
+//                     AudioPlayer.current.playFromPositionAsync(0);
+//                     navigation.navigate('Game');
+//                 }
+//                 }>
+//                     <AntDesign name="arrowright" size={30} color="black" />
+//                 </TouchableOpacity>
+//             </View>
 

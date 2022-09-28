@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-        backgroundColor: 'black',
+        backgroundColor: "#E5E5E5",
         height: '100%',
         width: '100%',
         alignItems: 'center',
@@ -31,7 +31,7 @@ export default StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 100,
-        borderColor: "white",
+        borderColor: "black",
         borderWidth: 5
     }
 });
