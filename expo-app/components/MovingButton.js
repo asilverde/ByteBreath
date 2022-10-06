@@ -4,7 +4,7 @@ import {View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native'
 import styles from './Slider.style.js';
 import * as Haptics from 'expo-haptics';
 
-// Single function to handle line, box, and circle breathing
+// Single function to handle line and box
 function MovingButton() {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
@@ -13,6 +13,31 @@ function MovingButton() {
     const [path, setPath] = useState([]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
+    const [timeOfRelease, setTimeOfRelease] = useState(0);
+
+    // Determines if finger is within circle
+    const calculateRadialDist = (x_dist, y_dist) => {
+        return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
+    }
+
+    // Called when user makes contact with circle
+    const startBreathing = () => {
+        if (timeOfRelease == 0 || Date.now() - timeOfRelease > 1000){
+            setTimeOfRelease(0);
+            setIsFollowing(true);
+        }
+    }
+
+    // Called when user releases contact with circle
+    const stopBreathing = () => {
+        if (isFollowing) {
+            setIsFollowing(false);
+            if (timeOfRelease == 0) {
+                setTimeOfRelease(Date.now());
+            }
+        }
+    }
+
 
     var options = 
     {
@@ -37,10 +62,6 @@ function MovingButton() {
         translation.x.setValue(0);
     }
 
-    // Called when user makes contact with circle
-    const startBreathing = () => {
-        setIsFollowing(true);
-    }
     const buildPath = () => {
         output = []
         for (let i = 0; i < settings.inhale; i++) {
@@ -63,12 +84,7 @@ function MovingButton() {
                 output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]); 
             }
         }
-        console.log(output);
         setPath(output);
-    }
-
-    // Called when user releases contact with circle
-    const stopBreathing = () => {
     }
 
     useEffect(() => {
@@ -84,14 +100,14 @@ function MovingButton() {
                         path.length - 1 == 2 * settings.pause + settings.exhale ||
                         path.length - 1 == settings.pause + settings.exhale ||
                         path.length - 1 == settings.pause) {
-                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                    } else {
+                            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        } else {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }
                     setPath(path.slice(1));
                 });
             } else {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 buildPath();
             }
         }
@@ -104,16 +120,19 @@ function MovingButton() {
                 style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
                 ]}
                 onStartShouldSetResponder={() => true}
-                onTouchStart={() => {
-                    setIsFollowing(true);
-                }}
                 onResponderStart={() => {
-                    setIsFollowing(true);
+                    startBreathing();
                 }}
                 onResponderMove={(event) => {
+                    if (event.nativeEvent.touches.length < 2) {
+                        const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
+                        if (radialDist > 60 && isFollowing) {
+                            stopBreathing();
+                        }
+                    }
                 }}
                 onResponderRelease={() => {
-                    setIsFollowing(false);
+                    stopBreathing();
                 }}>
                 </View>
             </Animated.View>
