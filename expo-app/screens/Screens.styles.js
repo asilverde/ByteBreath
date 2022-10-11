@@ -2,13 +2,10 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     header: {
-        flex: 1,
-        maxHeight: "15%",
-        width: "100%",
-        backgroundColor: 'black',
-        flexDirection:"row",
-        alignItems: 'center',
-        justifyContent:'flex-end',
+        backgroundColor: "#E5E5E5",
+        height: '10%',
+        width: '100%',
+        backgroundColor: "blue"
     },
     container: {
         backgroundColor: "#E5E5E5",
@@ -194,7 +191,7 @@ export default StyleSheet.create({
     },
     rectangle1: {
         position: "absolute",
-        width: 312,
+        width: 300,
         height: 13,
         left: 0,
         top: 140,

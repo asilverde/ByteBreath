@@ -71,6 +71,21 @@ function Settings({ navigation }) {
     }
     return (
         <View style={styles.container}>
+            <TouchableOpacity
+                style={{
+                    position: "absolute",
+                    left: "2.85%",
+                    right: "14.49%",
+                    top: "3.00%"
+
+                }}
+                onPress={() => {
+                    update();
+                    navigation.navigate('Home');
+                }
+                }>
+                    <MaterialIcons name="cancel" size={32} color="gray" />
+            </TouchableOpacity>
             <Text style={styles.settingsHeader}>settings</Text>
             <View style={styles.rectangle1}></View>
             <TouchableOpacity onPress={() => {}} activeOpacity={0.6}>

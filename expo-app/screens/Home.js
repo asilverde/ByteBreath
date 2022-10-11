@@ -13,37 +13,35 @@ function Home({ navigation }) {
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={{
-                    position: "absolute",
-                    left: "75.85%",
-                    right: "14.49%",
-                    top: "1.67%",
-                    bottom: "93.86%",
-                    
-                    background: "#000000"
-                }}
-                onPress={() => {
-                    navigation.navigate('About');
-                }
-                }>
-                    <AntDesign name="questioncircle" size={24} color="gray" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                style={{
-                    position: "absolute",
-                    left: "88.19%",
-                    right: "3.16%",
-                    top: "1.79%",
-                    bottom: "93.97%",
-                    
-                    background: "#000000"
-                }}
-                onPress={() => {
-                    navigation.navigate('Settings');
-                }
-                }>
-                    <Feather name="settings" size={24} color="gray" />
-                </TouchableOpacity>
+            style={{
+                position: "absolute",
+                left: "75.85%",
+                right: "14.49%",
+                top: "3.67%",
+                
+                background: "#000000"
+            }}
+            onPress={() => {
+                navigation.navigate('About');
+            }
+            }>
+                <AntDesign name="questioncircle" size={24} color="gray" />
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={{
+                position: "absolute",
+                left: "88.19%",
+                right: "3.16%",
+                top: "3.79%",
+                
+                background: "#000000"
+            }}
+            onPress={() => {
+                navigation.navigate('Settings');
+            }
+            }>
+                <Feather name="settings" size={24} color="gray" />
+            </TouchableOpacity>
             <View style={styles.titleBox}>
                 <Text style={styles.titleText}>byte breath</Text>
             </View>
