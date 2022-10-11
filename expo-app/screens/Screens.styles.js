@@ -69,7 +69,7 @@ export default StyleSheet.create({
         width: 280,
         height: 300,
         left: 51,
-        top: 320,
+        top: 310,
 
         background: "#D9D9D9"
     },

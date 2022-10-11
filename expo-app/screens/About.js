@@ -62,7 +62,7 @@ function About({ navigation }) {
             <View style={[styles.ellipse1, {top: 140, left: 325}]}></View>
             <View style={[styles.ellipse1, {top: 140, left: 340}]}></View>
             <Text style={[styles.textbox, {top: 165}]}>
-                A simple & interactive deep breathing excercise to help you lower anxiety & stress.
+                A simple & interactive deep breathing exercise to help you lower anxiety & stress.
             </Text>
 
             <Text style={[styles.header, {top: 250}]}>
