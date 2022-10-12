@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native';
 import styles from './Slider.style.js';
+import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
 // Single function to handle line and box
@@ -15,6 +16,60 @@ function MovingButton() {
     const settings = useSelector( state => state.settings );
     const [timeOfRelease, setTimeOfRelease] = useState(0);
 
+    const breathingPath = ["Inhale", "Pause", "Exhale", "Pause"];
+    const [currentBreath, setCurrentBreath] = useState(0);
+
+    const [currentSound, setCurrentSound] = useState(14 - settings.inhale);
+    const [soundsLoaded, setSoundsLoaded] = useState(false);
+
+    const harpSound = useRef(new Audio.Sound());
+
+    const ambientSound = useRef(new Audio.Sound());
+    const breathingSound = useRef(new Audio.Sound());
+
+    async function loadSounds() {
+        await harpSound.current.unloadAsync();
+        await harpSound.current.loadAsync(require('../assets/BB-sounds/BB-main-525.wav'), {}, true);
+    }
+    async function playInhale() {
+        await breathingSound.current.unloadAsync();
+        await breathingSound.current.loadAsync(require('../assets/BB-sounds/Inhale.wav'), {}, true);
+        await breathingSound.current.playAsync();
+    }
+
+    async function playExhale() {
+        await breathingSound.current.unloadAsync();
+        await breathingSound.current.loadAsync(require('../assets/BB-sounds/Exhale.wav'), {}, true);
+        await breathingSound.current.playAsync();
+    }
+
+    async function playHarp() {
+        await harpSound.current.playAsync();
+    }
+
+    const playAudio = async () => {
+        try {
+          const result = await harpSound.current.getStatusAsync();
+          if (result.isLoaded) {
+            if (result.isPlaying === false) {
+                harpSound.current.playAsync();
+            }
+          }
+        } catch (error) {}
+      };
+    
+      const pauseAudio = async () => {
+        try {
+          const result = await harpSound.current.getStatusAsync();
+          if (result.isLoaded) {
+            if (result.isPlaying === true) {
+                setTimeout(() => harpSound.current.pauseAsync(), 1000);
+            }
+          }
+        } catch (error) {}
+      };
+    
+
     // Determines if finger is within circle
     const calculateRadialDist = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -26,6 +81,7 @@ function MovingButton() {
             setTimeOfRelease(0);
             setIsFollowing(true);
         }
+        playAudio();
     }
 
     // Called when user releases contact with circle
@@ -36,6 +92,7 @@ function MovingButton() {
                 setTimeOfRelease(Date.now());
             }
         }
+        pauseAudio();
     }
 
 
@@ -84,10 +141,15 @@ function MovingButton() {
                 output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]); 
             }
         }
+        setCurrentBreath(0);
         setPath(output);
     }
 
     useEffect(() => {
+        if (!soundsLoaded) {
+            loadSounds();
+            setSoundsLoaded(true);
+        }
         if(isFollowing) {
             if (path.length != 0) {
                 Animated.timing(path[0][0], {
@@ -100,8 +162,9 @@ function MovingButton() {
                         path.length - 1 == 2 * settings.pause + settings.exhale ||
                         path.length - 1 == settings.pause + settings.exhale ||
                         path.length - 1 == settings.pause) {
-                            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                        } else {
+                        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        setCurrentBreath((currentBreath + 1) % 4);
+                    } else {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }
                     setPath(path.slice(1));
