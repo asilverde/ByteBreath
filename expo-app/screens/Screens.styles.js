@@ -149,10 +149,10 @@ export default StyleSheet.create({
         /* style */
 
         position: "absolute",
-        width: 83,
+        width: 100,
         height: 60,
         left: 50,
-        top: 162,
+        top: 160,
 
         fontFamily: "Poppins",
         fontStyle: "normal",
@@ -161,7 +161,25 @@ export default StyleSheet.create({
         lineHeight: 60,
         /* identical to box height, or 200% */
         display: "flex",
-        alignItems: "center",
+
+        color: "#999999"
+    },
+    settingsCurrent: {
+        /* style */
+
+        position: "absolute",
+        width: 100,
+        height: 60,
+        left: 250,
+        top: 160,
+
+        fontFamily: "Poppins",
+        fontStyle: "normal",
+        fontWeight: "300",
+        fontSize: 20,
+        lineHeight: 60,
+        /* identical to box height, or 200% */
+        display: "flex",
 
         color: "#999999"
     },
@@ -203,7 +221,7 @@ export default StyleSheet.create({
         width: 310,
         height: 3,
         left: 30,
-        top: 290,
+        top: 210,
 
         backgroundColor: "#999999",
     }

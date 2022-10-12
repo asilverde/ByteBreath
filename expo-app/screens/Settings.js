@@ -9,45 +9,6 @@ import { StyleSheet } from 'react-native';
 
 import styles from './Screens.styles.js';
 
-const Accordion = ({ title, children }) => {
-    const [open, setOpen] = useState(false);
-    const animatedController = useRef(new Animated.Value(0)).current;
-    const [bodySectionHeight, setBodySectionHeight] = useState(0);
-
-    const bodyHeight = animatedController.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 200],
-    });
-  
-    const toggleOpen = () => {
-        if (open) {
-          Animated.timing(animatedController, {
-            useNativeDriver: false,
-            duration: 300,
-            toValue: 0,
-          }).start();
-        } else {
-          Animated.timing(animatedController, {
-            useNativeDriver: false,
-            duration: 300,
-            toValue: 1,
-          }).start();
-        }
-        setOpen(!open);
-    };
-  
-    return (
-      <>
-        <TouchableOpacity onPress={toggleOpen} activeOpacity={0.6}>
-          {title}
-        </TouchableOpacity>
-        <Animated.View style={[c_styles.list, { height: bodyHeight }]}>
-            {children}
-        </Animated.View>
-      </>
-    );
-};
-
 function Settings({ navigation }) {
     const dispatch = useDispatch();
 
@@ -57,6 +18,7 @@ function Settings({ navigation }) {
     const [exhale, setExhale] = useState(settings.exhale);
     const [pause, setPause] = useState(settings.pause);
     const [mode, setMode] = useState(settings.mode);
+    const [interval, setInterval] = useState("5:2:5");
     const [background, setBackground] = useState(settings.background);
 
     const update = () => {
@@ -68,12 +30,65 @@ function Settings({ navigation }) {
             background: background
         }
         dispatch( updateSettings(newSettings) );
-    }
+    };
 
-    const setTime = (i, p, e) => {
-        setInhale(i);
-        setExhale(e);
-        setPause(p);
+    const Accordion = ({ title, current, func, options, optionsDisplay, offset}) => {
+        const [open, setOpen] = useState(false);
+        const animatedController = useRef(new Animated.Value(0)).current;
+    
+        const bodyHeight = animatedController.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 100],
+        });
+
+        var buttons = []
+        for (let i = 0; i < options.length; i++) {
+            buttons.push(
+                <TouchableOpacity
+                style={[styles.smallButton, {backgroundColor: (current == optionsDisplay[i]) ? "#68cbf8" : "#D9D9D9"}]} 
+                onPress={() => { func(options[i]) }
+                }>
+                    <Text>{optionsDisplay[i]}</Text>
+                </TouchableOpacity>
+            );
+        }
+      
+        const toggleOpen = () => {
+            if (open) {
+              Animated.timing(animatedController, {
+                useNativeDriver: false,
+                duration: 300,
+                toValue: 0,
+              }).start();
+            } else {
+              Animated.timing(animatedController, {
+                useNativeDriver: false,
+                duration: 300,
+                toValue: 1,
+              }).start();
+            }
+            setOpen(!open);
+        };
+      
+        return (
+          <>
+            <TouchableOpacity onPressIn={toggleOpen} activeOpacity={0.0}>
+                <Text style={[styles.settingsStyle, {top: offset}]}>{title}</Text>
+            </TouchableOpacity>
+            <Text style={[styles.settingsCurrent, {top: offset}]}>{current}</Text>
+            <View style={[styles.line1, {top:offset + 45}]}></View>
+            <Animated.View style={[styles.row, { top: offset+40, overflow:"hidden", height: bodyHeight }]}>
+                {buttons}
+            </Animated.View>
+          </>
+        );
+    };
+
+    const setTime = (newInterval) => {
+        setInhale(newInterval[0]);
+        setPause(newInterval[1]);
+        setExhale(newInterval[2]);
+        setInterval(newInterval[0]+':'+newInterval[1]+':'+newInterval[2]);
     }
     return (
         <View style={styles.container}>
@@ -94,55 +109,14 @@ function Settings({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.settingsHeader}>settings</Text>
             <View style={styles.rectangle1}></View>
-            <TouchableOpacity onPress={() => {}} activeOpacity={0.6}>
-                <Text style={styles.settingsStyle}>style</Text>
-            </TouchableOpacity>
-            <View style={styles.row}>
-                <TouchableOpacity
-                style={[styles.smallButton, {backgroundColor: (mode == 'box') ? "#68cbf8" : "#D9D9D9"}]} 
-                onPress={() => { setMode('box') }
-                }>
-                    <Text>box</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                style={[styles.smallButton, {backgroundColor: (mode == 'circle') ? "#68cbf8" : "#D9D9D9"}]}
-                onPress={() => { setMode('circle') }
-                }>
-                    <Text>circle</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                style={[styles.smallButton, {backgroundColor: (mode == 'line') ? "#68cbf8" : "#D9D9D9"}]}
-                onPress={() => { setMode('line') }
-                }>
-                    <Text>line</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.line1}></View>
-
-            <TouchableOpacity onPress={() => {}} activeOpacity={0.6}>
-                <Text style={[styles.settingsStyle, {top: 300}]}>time</Text>
-            </TouchableOpacity>
-            <View style={[styles.row, {top: 340}]}>
-                <TouchableOpacity
-                style={[styles.smallButton, {backgroundColor: (inhale == 5) ? "#68cbf8" : "#D9D9D9"}]} 
-                onPress={() => { setTime(5, 2, 5) }
-                }>
-                    <Text>5:2:5</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                style={[styles.smallButton, {backgroundColor: (inhale == 7) ? "#68cbf8" : "#D9D9D9"}]}
-                onPress={() => { setTime(7, 2, 3) }
-                }>
-                    <Text>7:2:3</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                style={[styles.smallButton, {backgroundColor: (inhale == 3) ? "#68cbf8" : "#D9D9D9"}]}
-                onPress={() => { setTime(3, 1, 3) }
-                }>
-                    <Text>3:1:3</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={[styles.line1, {top: 430}]}></View>
+            <Accordion title="style" current={mode} func={setMode} 
+                       options={["box", "line", "circle"]} 
+                       optionsDisplay={["box", "line", "circle"]} offset={160}>
+            </Accordion>
+            <Accordion title="interval" current={interval} func={setTime} 
+                       options={[[5, 2, 5], [3, 1, 3], [7, 2, 3]]} 
+                       optionsDisplay={["5:2:5", "3:1:3", "7:2:3"]} offset={280}>
+            </Accordion>
 
             <TouchableOpacity 
             style={styles.beginButton}
