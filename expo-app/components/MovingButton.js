@@ -6,7 +6,7 @@ import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
 // Single function to handle line and box
-function MovingButton() {
+function MovingButton ( {endSession} ) {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:-width, y:height})).current;
@@ -15,58 +15,83 @@ function MovingButton() {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
     const [timeOfRelease, setTimeOfRelease] = useState(0);
+    const [hasStarted, setHasStarted] = useState(0);
+    const [score, setScore] = useState(-1);
 
     const breathingPath = ["Inhale", "Pause", "Exhale", "Pause"];
-    const [currentBreath, setCurrentBreath] = useState(0);
+    const [currentBreathState, setCurrentBreathState] = useState(0);
 
-    const [currentSound, setCurrentSound] = useState(14 - settings.inhale);
-    const [soundsLoaded, setSoundsLoaded] = useState(false);
+    const inhale = useRef(new Audio.Sound());
+    const exhale = useRef(new Audio.Sound());
 
-    const harpSound = useRef(new Audio.Sound());
-
-    const ambientSound = useRef(new Audio.Sound());
-    const breathingSound = useRef(new Audio.Sound());
-
-    async function loadSounds() {
-        await harpSound.current.unloadAsync();
-        await harpSound.current.loadAsync(require('../assets/BB-sounds/BB-main-525.wav'), {}, true);
+    async function loadInhale() {
+        await inhale.current.unloadAsync();
+        await inhale.current.loadAsync(require('../assets/BB-sounds/Inhale525.wav'), {}, true);
     }
+
+    async function loadExhale() {
+        await exhale.current.unloadAsync();
+        await exhale.current.loadAsync(require('../assets/BB-sounds/Exhale525.wav'), {}, true);
+    }
+
     async function playInhale() {
-        await breathingSound.current.unloadAsync();
-        await breathingSound.current.loadAsync(require('../assets/BB-sounds/Inhale.wav'), {}, true);
-        await breathingSound.current.playAsync();
+        await inhale.current.playAsync();
     }
 
     async function playExhale() {
-        await breathingSound.current.unloadAsync();
-        await breathingSound.current.loadAsync(require('../assets/BB-sounds/Exhale.wav'), {}, true);
-        await breathingSound.current.playAsync();
+        await exhale.current.playAsync();
     }
 
-    async function playHarp() {
-        await harpSound.current.playAsync();
+    async function resetInhale() {
+        await inhale.current.setPositionAsync(0);
+    }
+
+    async function resetExhale() {
+        await exhale.current.setPositionAsync(0);
     }
 
     const playAudio = async () => {
-        try {
-          const result = await harpSound.current.getStatusAsync();
-          if (result.isLoaded) {
-            if (result.isPlaying === false) {
-                harpSound.current.playAsync();
-            }
-          }
-        } catch (error) {}
+        if (currentBreathState < 2) {
+            try {
+                const result = await inhale.current.getStatusAsync();
+                if (result.isLoaded) {
+                    if (result.isPlaying === false) {
+                        inhale.current.playAsync();
+                    }
+                }
+                } catch (error) {}
+        } else {
+            try {
+                const result = await exhale.current.getStatusAsync();
+                if (result.isLoaded) {
+                    if (result.isPlaying === false) {
+                        exhale.current.playAsync();
+                    }
+                }
+            } catch (error) {}
+        }
       };
     
       const pauseAudio = async () => {
-        try {
-          const result = await harpSound.current.getStatusAsync();
-          if (result.isLoaded) {
-            if (result.isPlaying === true) {
-                setTimeout(() => harpSound.current.pauseAsync(), 1000);
+        if (currentBreathState < 2) {
+            try {
+            const result = await inhale.current.getStatusAsync();
+            if (result.isLoaded) {
+                if (result.isPlaying === true) {
+                    inhale.current.pauseAsync();
+                }
             }
-          }
-        } catch (error) {}
+            } catch (error) {}
+        } else {
+            try {
+                const result = await exhale.current.getStatusAsync();
+                if (result.isLoaded) {
+                  if (result.isPlaying === true) {
+                      exhale.current.pauseAsync();
+                  }
+                }
+            } catch (error) {}
+        }
       };
     
 
@@ -80,8 +105,11 @@ function MovingButton() {
         if (timeOfRelease == 0 || Date.now() - timeOfRelease > 1000){
             setTimeOfRelease(0);
             setIsFollowing(true);
+            playAudio();
         }
-        playAudio();
+        if (!hasStarted) {
+            setHasStarted(true);
+        }
     }
 
     // Called when user releases contact with circle
@@ -91,31 +119,15 @@ function MovingButton() {
             if (timeOfRelease == 0) {
                 setTimeOfRelease(Date.now());
             }
-        }
-        pauseAudio();
-    }
-
-
-    var options = 
-    {
-        "box" :
-        {
-            "transformations" : [[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]
-        },
-        "line" :
-        {
-            "transformations" : [[translation.y, -height], [translation.x, 0], [translation.y, height], [translation.x, 0]]
-        },
-        "circle" :
-        {
-            "transformations" : [[0, -1], [0, 0], [0, -1], [0, 0]]
+            pauseAudio();
         }
     }
+
     let current_path = [];
     if (settings.mode == "box") {
-        current_path = options["box"]["transformations"];
+        current_path = [[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]
     } else {
-        current_path = options["line"]["transformations"];
+        current_path = [[translation.y, -height], [translation.x, 0], [translation.y, height], [translation.x, 0]]
         translation.x.setValue(0);
     }
 
@@ -141,15 +153,11 @@ function MovingButton() {
                 output.push([current_path[3][0], (2 * (i + 1) * current_path[3][1] / settings.pause) - current_path[3][1]]); 
             }
         }
-        setCurrentBreath(0);
+        setCurrentBreathState(0);
         setPath(output);
     }
 
     useEffect(() => {
-        if (!soundsLoaded) {
-            loadSounds();
-            setSoundsLoaded(true);
-        }
         if(isFollowing) {
             if (path.length != 0) {
                 Animated.timing(path[0][0], {
@@ -163,21 +171,47 @@ function MovingButton() {
                         path.length - 1 == settings.pause + settings.exhale ||
                         path.length - 1 == settings.pause) {
                         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                        setCurrentBreath((currentBreath + 1) % 4);
+                        setCurrentBreathState((currentBreathState + 1) % 4);
                     } else {
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     }
+                    console.log(currentBreathState);
                     setPath(path.slice(1));
                 });
             } else {
+                setScore(score + 1);
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 buildPath();
             }
         }
     }, [isFollowing, path]);
 
+    useEffect(() => {
+        if (score < 5) {
+            if (hasStarted) {
+                if (currentBreathState == 0) {
+                    playInhale();
+                } else if (currentBreathState == 1) {
+                    resetExhale();
+                } else if (currentBreathState == 2) {
+                    playExhale();
+                } else {
+                    resetInhale();
+                }
+                
+            } else {
+                loadInhale();
+                loadExhale();
+            }
+        } else {
+            endSession();
+        }
+    }, [currentBreathState, hasStarted])
+
     return (
         <View style = {styles.container}>
+            <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
+            <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
             <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                 <View 
                 style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }

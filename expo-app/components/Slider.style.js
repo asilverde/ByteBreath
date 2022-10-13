@@ -16,11 +16,24 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    command: {
+        position: "absolute",
+        width: 100,
+        height: 50,
+        left: 50,
+        top: 30,
+    },
+    score: {
+        position: "absolute",
+        width: 100,
+        height: 50,
+        left: 300,
+        top: 30,
+    },
     text: {
-        fontSize: 24,
+        fontSize: 32,
         fontWeight: "bold",
-        padding: 100,
-        color: 'white'
+        color: 'black'
     },
     button: {
         width: 100,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -10,12 +10,30 @@ import About from "./screens/About.js"
 
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
+import AppLoading from 'expo-app-loading';
+import useFonts from './hooks/useFonts';
+import * as Font from 'expo-font';
 // import store from "./redux/app-redux"
 
 import { store, persistor } from './redux/state/store';
 
-function App() {
+export default function App() {
     const Stack = createNativeStackNavigator();
+    const [IsReady, SetIsReady] = useState(false);
+
+    const LoadFonts = async () => {
+        await useFonts();
+    };
+
+    if (!IsReady) {
+        return (
+        <AppLoading
+            startAsync={LoadFonts}
+            onFinish={() => SetIsReady(true)}
+            onError={() => {}}
+        />
+        );
+    }
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
@@ -33,5 +51,3 @@ function App() {
         </Provider>
     );
 }
-
-export default App;

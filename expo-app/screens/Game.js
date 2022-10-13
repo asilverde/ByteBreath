@@ -7,14 +7,14 @@ import styles from './Screens.styles.js';
 
 function Game({ navigation }) {
     const AudioPlayer = useRef(new Audio.Sound());
-    AudioPlayer.current.loadAsync(require('../assets/sounds/long-bell.wav'), {}, true);
+    AudioPlayer.current.loadAsync(require('../assets/BB-sounds/Complete.wav'), {}, true);
 
     return (
         <View>
             <MovingButton
             endSession={(breathCount) => {
               AudioPlayer.current.playFromPositionAsync(0);
-              navigation.navigate('End', {breathCount});
+              navigation.navigate('Home');
             }}/>
         </View>
     );
