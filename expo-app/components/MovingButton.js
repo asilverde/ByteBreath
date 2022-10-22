@@ -25,7 +25,6 @@ function MovingButton ( {endSession} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const [previousAudioPosition, setPreviousAudioPosition] = useState(0);
     
     // if (settings.mode == "box") {
     //     setPath([[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]])
@@ -43,7 +42,7 @@ function MovingButton ( {endSession} ) {
         audio.current.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
         await audio.current.loadAsync( require('../assets/sounds/BB525.wav'), 
             {
-                progressUpdateIntervalMillis: 10,
+                progressUpdateIntervalMillis: 20,
                 positionMillis: 0,
                 shouldPlay: false,
                 rate: 1.0,
@@ -80,17 +79,26 @@ function MovingButton ( {endSession} ) {
         } catch (error) {}
     }
 
+    const playHaptic = (positionMillis) => {
+        let adjustMillis = positionMillis * (59.5 / 60)
+        // let offset = 20;
+        // let totalLength = settings.inhale + 2 * settings.pause + settings.exhale;
+        // console.log(Math.abs((positionMillis % 1000) - 100));
+        if (Math.abs((adjustMillis % 1000) - 920) <= 10) { 
+            // let secondsPast = Math.round((positionMillis / 1000));
+            // if (secondsPast % totalLength == 0 ||
+            //     secondsPast % totalLength == settings.inhale ||
+            //     secondsPast % totalLength == settings.inhale + settings.pause ||
+            //     secondsPast % totalLength == settings.inhale + settings.pause + settings.exhale) {
+            //     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            // } else {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            // }
+        }
+    };
+
     const onPlaybackStatusUpdate = async (playbackStatus) => {
-        // if (playbackStatus["positionMillis"] > previousAudioPosition) {
-        //     if (!isFollowing) {
-        //         setIsFollowing(true);
-        //     }
-        //     setPreviousAudioPosition(playbackStatus["positionMillis"]);
-        // } else if (playbackStatus["positionMillis"] == previousAudioPosition) {
-        //     if (isFollowing) {
-        //         setIsFollowing(false);
-        //     }
-        // }
+        playHaptic(playbackStatus['positionMillis']);
     }
 
     // Called when user makes contact with circle
