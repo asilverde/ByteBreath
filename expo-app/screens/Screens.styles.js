@@ -150,7 +150,7 @@ export default StyleSheet.create({
 
         position: "absolute",
         width: 100,
-        height: 60,
+        height: 50,
         left: 50,
         top: 160,
 

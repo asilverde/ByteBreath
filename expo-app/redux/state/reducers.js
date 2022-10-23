@@ -1,14 +1,17 @@
-import { UPDATE_SETTINGS } from '../actions/breathSettings';
+import { UPDATE_SETTINGS} from '../actions/breathSettings';
 import { combineReducers } from 'redux';
 
-const settings = (settings = { inhale: 5, exhale: 5, pause: 2, mode: 'square', background: 'SPACE'}, action) => {
+const settings = (settings = { inhale: 5, exhale: 5, pause: 2, 
+                               mode: 'box', background: 'space',
+                               sound: ['harp', 'pad', 'breath']}, action) => {
     switch (action.type) {
         case UPDATE_SETTINGS:
             return { inhale: action.settings.inhale,   
                      exhale: action.settings.exhale,
                      pause: action.settings.pause,   
                      mode: action.settings.mode, 
-                     background: action.settings.background}
+                     background: action.settings.background,
+                     sound: action.settings.sound}
         default:
             return settings;
     }

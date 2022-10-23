@@ -11,44 +11,55 @@ import styles from './Screens.styles.js';
 
 function Settings({ navigation }) {
     const dispatch = useDispatch();
-
     const settings = useSelector( state => state.settings );
 
-    const [inhale, setInhale] = useState(settings.inhale);
-    const [exhale, setExhale] = useState(settings.exhale);
-    const [pause, setPause] = useState(settings.pause);
     const [mode, setMode] = useState(settings.mode);
-    const [interval, setInterval] = useState("5:2:5");
     const [background, setBackground] = useState(settings.background);
+    const [sound, setSound] = useState(settings.sound);
+
+    const updateSound = (newSound, i) => {
+        if (sound.includes(newSound)) {
+            setSound(sound.filter(item => item !== newSound));
+        } else {
+            setSound(sound.concat(newSound));
+        }
+    };
 
     const update = () => {
         const newSettings = {
-            inhale: inhale,   
-            exhale: exhale,
-            pause: pause,   
+            inhale: 5,   
+            pause: 2, 
+            exhale: 5,  
             mode: mode, 
-            background: background
+            background: background,
+            sound: sound,
         }
         dispatch( updateSettings(newSettings) );
     };
 
-    const Accordion = ({ title, current, func, options, optionsDisplay, offset}) => {
+    const Accordion = ({ title, current, func, options, offset}) => {
         const [open, setOpen] = useState(false);
         const animatedController = useRef(new Animated.Value(0)).current;
     
         const bodyHeight = animatedController.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, 100],
+            outputRange: [0, 80],
         });
 
         var buttons = []
+
         for (let i = 0; i < options.length; i++) {
+            let highlight = (current == options[i]);
+            if (Array.isArray(current)) {
+                highlight = current.includes(options[i]);
+            }
             buttons.push(
                 <TouchableOpacity
-                style={[styles.smallButton, {backgroundColor: (current == optionsDisplay[i]) ? "#68cbf8" : "#D9D9D9"}]} 
-                onPress={() => { func(options[i]) }
-                }>
-                    <Text>{optionsDisplay[i]}</Text>
+                style={[styles.smallButton, {backgroundColor: highlight ? "#68cbf8" : "#D9D9D9"}]} 
+                onPress={() => { 
+                    func(options[i]) 
+                }}>
+                    <Text>{options[i]}</Text>
                 </TouchableOpacity>
             );
         }
@@ -75,21 +86,15 @@ function Settings({ navigation }) {
             <TouchableOpacity onPressIn={toggleOpen} activeOpacity={0.0}>
                 <Text style={[styles.settingsStyle, {top: offset}]}>{title}</Text>
             </TouchableOpacity>
-            <Text style={[styles.settingsCurrent, {top: offset}]}>{current}</Text>
-            <View style={[styles.line1, {top:offset + 45}]}></View>
-            <Animated.View style={[styles.row, { top: offset+40, overflow:"hidden", height: bodyHeight }]}>
+            <Text style={[styles.settingsCurrent, {top: offset}]}>{(Array.isArray(current)) ? current.length : current}</Text>
+            <View style={[styles.line1, {top:offset + 50}]}></View>
+            <Animated.View style={[styles.row, { top: offset+60, overflow:"hidden", height: bodyHeight }]}>
                 {buttons}
             </Animated.View>
           </>
         );
     };
 
-    const setTime = (newInterval) => {
-        setInhale(newInterval[0]);
-        setPause(newInterval[1]);
-        setExhale(newInterval[2]);
-        setInterval(newInterval[0]+':'+newInterval[1]+':'+newInterval[2]);
-    }
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -110,12 +115,13 @@ function Settings({ navigation }) {
             <Text style={styles.settingsHeader}>settings</Text>
             <View style={styles.rectangle1}></View>
             <Accordion title="style" current={mode} func={setMode} 
-                       options={["box", "line", "circle"]} 
-                       optionsDisplay={["box", "line", "circle"]} offset={160}>
+                       options={["box", "line", "triangle"]} offset={160}>
             </Accordion>
-            <Accordion title="interval" current={interval} func={setTime} 
-                       options={[[5, 2, 5], [3, 1, 3], [7, 2, 3]]} 
-                       optionsDisplay={["5:2:5", "3:1:3", "7:2:3"]} offset={280}>
+            <Accordion title="scene" current={background} func={setBackground} 
+                       options={["space", "nature", "cloud"]} offset={280}>
+            </Accordion>
+            <Accordion title="sound" current={sound} func={updateSound} 
+                       options={["harp", "pad", "breath"]} offset={400}>
             </Accordion>
 
             <TouchableOpacity 
@@ -129,14 +135,6 @@ function Settings({ navigation }) {
         </View>
     );
 }
-const c_styles = StyleSheet.create({
-    hidden: {
-      height: 0,
-    },
-    list: {
-      overflow: 'hidden'
-    },
-});
 
 export default Settings
 /* <TouchableOpacity onPress={setIsStyleOpen(!isStyleOpen)} activeOpacity={0.6}>
@@ -308,3 +306,12 @@ export default Settings
 //                     </Picker>
 //                 </View>
 //             </View>
+
+// const c_styles = StyleSheet.create({
+//     hidden: {
+//       height: 0,
+//     },
+//     list: {
+//       overflow: 'hidden'
+//     },
+// });

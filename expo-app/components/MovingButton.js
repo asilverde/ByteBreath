@@ -6,7 +6,6 @@ import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-// Single function to handle line and box
 function MovingButton ( {endSession} ) {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
