@@ -2,12 +2,12 @@ import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import styles from './Screens.styles.js';
 import { Fontisto } from '@expo/vector-icons'; 
-function Win({ route, navigation }) {
+function End({ route, navigation }) {
     const {breathCount} = route.params;
     const endText = `Completed Breaths: ${breathCount}`;
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{(breathCount == 5) ? 'Good Job' : ''}</Text>
+            <Text style={styles.title}>{'Good Job'}</Text>
             <Text style={styles.text}>{endText}</Text>
             <TouchableOpacity
             style={styles.button}
@@ -18,4 +18,4 @@ function Win({ route, navigation }) {
     );
 }
 
-export default Win
+export default End

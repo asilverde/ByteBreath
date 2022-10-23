@@ -16,7 +16,7 @@ function BoxBreathing ( {endSession} ) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
-    const [score, setScore] = useState(-1);
+    const [score, setScore] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
                              settings.exhale * 1000, settings.pause * 1000];
@@ -84,6 +84,7 @@ function BoxBreathing ( {endSession} ) {
     const startBreathing = () => {
         if (!hasStarted) {
             setHasStarted(true);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         }
         playAudio();
     }
@@ -103,6 +104,14 @@ function BoxBreathing ( {endSession} ) {
     }, []);
 
     useEffect(() => {
+        if (score == 5) {
+            stopBreathing();
+            audio.current.unloadAsync();
+            endSession(score);
+        }
+    }, [score]);
+
+    useEffect(() => {
         if(isFollowing) {
             Animated.timing(path[currentBreathState][0], {
                 toValue: path[currentBreathState][1],
@@ -112,6 +121,9 @@ function BoxBreathing ( {endSession} ) {
             }).start(({finished}) => {
                 if (finished) {
                     setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 4]);
+                    if (currentBreathState == 3) {
+                        setScore(score + 1);
+                    }
                     setCurrentBreathState((currentBreathState + 1) % 4);
                 }
             });

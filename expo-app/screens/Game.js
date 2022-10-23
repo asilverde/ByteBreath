@@ -21,17 +21,17 @@ function Game({ navigation }) {
             return <BoxBreathing
                         endSession={(breathCount) => {
                         AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('Home');
+                        navigation.navigate('End', {breathCount});
                     }}/>
         } else if (settings.mode == "line") {
             return <LineBreathing endSession={(breathCount) => {
                         AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('Home');
+                        navigation.navigate('End', {breathCount});
                     }}/>
         } else {
             return <TriBreathing endSession={(breathCount) => {
                         AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('Home');
+                        navigation.navigate('End', {breathCount});
                     }}/>
         }
     };

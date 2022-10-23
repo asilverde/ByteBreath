@@ -39,25 +39,22 @@ export default StyleSheet.create({
         alignItems: 'center'
     },
     titleBox: {
-        position: "absolute",
-        width: 383,
-        height: 150,
-        left: 51,
-        top: 152,
+        width: "80%",
+        height: "30%",
+        left: 50,
+        top: 120,
 
         display: 'flex',
         justifyContent: 'center',
         color: "#000000"
     },
     titleText: {
-        paddingTop: 20,
-        width: 383,
-        height: 150,
+        paddingTop: 30,
         fontFamily: 'Poppins',
         fontStyle: 'normal',
         fontWeight: '600',
         fontSize: 80,
-        lineHeight: 60,
+        lineHeight: 70,
         display: 'flex',
         alignItems: "center",
         justifyContent: 'center'
@@ -66,31 +63,31 @@ export default StyleSheet.create({
         boxSizing: "border-box",
 
         position: "absolute",
-        width: 280,
-        height: 300,
-        left: 51,
+        width: "75%",
+        height: "50%",
+        left: 50,
         top: 310,
 
-        background: "#D9D9D9"
+        color: "#D9D9D9"
     },
     bodyText: {
         position: "absolute",
-        left: 26,
-        right: 45,
-        top: 36,
-        bottom: 36,
+        left: "10%",
+        right: "15%",
+        top: "5%",
+        bottom: "10%",
+        paddingTop: 10,
 
         fontFamily: "Poppins",
         fontStyle: "normal",
         fontWeight: "600",
-        fontSize: 40,
-        lineHeight: 40,
+        fontSize: 36,
+        lineHeight: 38,
         /* or 125% */
         display: "flex",
+        justifyContent: 'center',
         alignItems: "center",
-        letterSpacing: 1,
-        transform: [{ translateY: -30 }],
-        color: "#000000"
+        letterSpacing: "0.5em"
 
     },
     beginButton: {
