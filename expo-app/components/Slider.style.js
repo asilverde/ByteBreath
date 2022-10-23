@@ -1,12 +1,17 @@
 import { StyleSheet } from 'react-native';
+import space from "../assets/backgrounds/space.jpg";
 
 export default StyleSheet.create({
     container: {
-        backgroundColor: "#E5E5E5",
+        flex: 1,
         height: '100%',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+    },
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
     },
     track: {
         height: '3%',
@@ -21,7 +26,7 @@ export default StyleSheet.create({
         width: 100,
         height: 50,
         left: 50,
-        top: 30,
+        top: 30
     },
     score: {
         position: "absolute",
@@ -33,7 +38,7 @@ export default StyleSheet.create({
     text: {
         fontSize: 32,
         fontWeight: "bold",
-        color: 'black'
+        color: '#777777'
     },
     button: {
         width: 100,

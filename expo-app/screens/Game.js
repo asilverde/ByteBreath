@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import MovingButton from "../components/MovingButton"
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -16,9 +15,11 @@ function Game({ navigation }) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
 
+
     const gameMode = () => {
         if (settings.mode == "box") {
-            return <BoxBreathing endSession={(breathCount) => {
+            return <BoxBreathing
+                        endSession={(breathCount) => {
                         AudioPlayer.current.playFromPositionAsync(0);
                         navigation.navigate('Home');
                     }}/>

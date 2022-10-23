@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native';
+import {ImageBackground, View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native';
 import styles from './Slider.style.js';
 
 import { Audio } from 'expo-av';
@@ -25,8 +25,8 @@ function BoxBreathing ( {endSession} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
+    const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
 
-    
     const calculateRadialDist = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
     }
@@ -119,31 +119,33 @@ function BoxBreathing ( {endSession} ) {
     }, [isFollowing, currentBreathState]);
 
     return (
-        <View style = {styles.container}>
-            <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-            <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
-            <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
-                <View 
-                style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
-                ]}
-                onStartShouldSetResponder={() => true}
-                onResponderStart={() => {
-                    startBreathing();
-                }}
-                onResponderMove={(event) => {
-                    if (event.nativeEvent.touches.length < 2) {
-                        const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
-                        if (radialDist > 60 && isFollowing) {
-                            stopBreathing();
+        <ImageBackground source={backgroundURI}  style={{width: '100%', height: '100%'}}>
+            <View style = {styles.container}>
+                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
+                <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
+                <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
+                    <View 
+                    style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
+                    ]}
+                    onStartShouldSetResponder={() => true}
+                    onResponderStart={() => {
+                        startBreathing();
+                    }}
+                    onResponderMove={(event) => {
+                        if (event.nativeEvent.touches.length < 2) {
+                            const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
+                            if (radialDist > 60 && isFollowing) {
+                                stopBreathing();
+                            }
                         }
-                    }
-                }}
-                onResponderRelease={() => {
-                    stopBreathing();
-                }}>
-                </View>
-            </Animated.View>
-        </View>
+                    }}
+                    onResponderRelease={() => {
+                        stopBreathing();
+                    }}>
+                    </View>
+                </Animated.View>
+            </View>
+        </ImageBackground>
     )
 }
 
