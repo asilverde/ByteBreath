@@ -66,7 +66,7 @@ export default StyleSheet.create({
         width: "75%",
         height: "50%",
         left: 50,
-        top: 310,
+        top: 290,
 
         color: "#D9D9D9"
     },
@@ -92,33 +92,27 @@ export default StyleSheet.create({
     },
     beginButton: {
         position: "absolute",
-        width: 180, 
-        height: 65,
+        width: "45%", 
+        height: "10%",
         left: 51,
-        top: 550,
+        top: 530,
 
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#000000",
         borderRadius: 38
     },
     beginText: {
         /* begin */
         position: "absolute",
-
-        width: 161,
-        height: 60,
-        left: 40,
-        top: -5,
-
         fontFamily: 'Poppins',
         fontStyle: "normal",
         fontWeight: "600",
         fontSize: 40,
         lineHeight: 70,
         /* or 175% */
-        display: "flex",
-        alignItems: "center",
-        letterSpacing: 1,
-
+        letterSpacing: 2,
         color: "white"
 
     },
@@ -221,5 +215,63 @@ export default StyleSheet.create({
         top: 210,
 
         backgroundColor: "#999999",
-    }
+    },
+    ellipse: {
+        position: "absolute",
+        width: 13,
+        height: 13,
+
+        backgroundColor: "black",
+        borderRadius: 50
+    },
+    demoStage: {
+        width: "20%",
+        height: "20%",
+        left: 50,
+        top: 100,
+
+        display: 'flex',
+        justifyContent: 'center',
+        color: "#000000"
+    },
+    demoVisual: {
+        width: "20%",
+        height: "20%",
+        left: 75,
+        top: 300,
+
+        display: 'flex',
+        justifyContent: 'center',
+        color: "#000000"
+    },
+    demoEllipse: {
+        position: "absolute",
+        width: 40,
+        height: 40,
+        top: 0,
+
+        backgroundColor: "white",
+        borderRadius: 50,
+        borderColor: "black",
+        borderWidth: 2
+    },
+    demoTextBox: {
+        position: "absolute",
+        width: "50%", 
+        height: "10%",
+        left: 85,
+        top: 580,
+    },
+    demoText: {
+        /* begin */
+
+        fontFamily: 'Poppins',
+        fontStyle: "normal",
+        fontWeight: "600",
+        fontSize: 16,
+        lineHeight: 60,
+        /* or 175% */
+        color: "gray"
+
+    },
 });

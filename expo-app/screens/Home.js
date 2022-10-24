@@ -7,9 +7,6 @@ import { Audio } from 'expo-av';
 import styles from './Screens.styles.js';
 
 function Home({ navigation }) {
-    const AudioPlayer = useRef(new Audio.Sound());
-    AudioPlayer.current.loadAsync(require('../assets/sounds/short-bell.wav'), {}, true);
-    
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -54,6 +51,14 @@ function Home({ navigation }) {
                 navigation.navigate('Game');
             }}>
                 <Text style={styles.beginText}>begin</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+            style={styles.demoTextBox}
+            onPress={() => {
+                navigation.navigate('Demo1');
+            }}>
+                <Text style={styles.demoText}>how to play?</Text>
             </TouchableOpacity>
         </View>
     );

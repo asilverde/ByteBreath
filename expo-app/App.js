@@ -7,6 +7,9 @@ import Game from "./screens/Game.js"
 import End from "./screens/End.js"
 import Settings from "./screens/Settings.js"
 import About from "./screens/About.js"
+import Demo1 from "./screens/Demo1.js"
+import Demo2 from "./screens/Demo2.js"
+import Demo3 from "./screens/Demo3.js"
 
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
@@ -45,6 +48,9 @@ export default function App() {
                         <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="About" component={About} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="Demo1" component={Demo1} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="Demo2" component={Demo2} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="Demo3" component={Demo3} options={{gestureEnabled: false}}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </PersistGate>

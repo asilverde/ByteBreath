@@ -1,4 +1,0 @@
-
-
-function Demo({ navigation }) {
-}
