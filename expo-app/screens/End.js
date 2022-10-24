@@ -7,8 +7,8 @@ function End({ route, navigation }) {
     const endText = `Completed Breaths: ${breathCount}`;
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{'Good Job'}</Text>
-            <Text style={styles.text}>{endText}</Text>
+            <Text style={styles.titleBox}>{'Good Job'}</Text>
+            <Text style={styles.textBox}>{endText}</Text>
             <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Home')}>

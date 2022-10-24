@@ -120,9 +120,6 @@ function Settings({ navigation }) {
             <Accordion title="scene" current={background} func={setBackground} 
                        options={["space", "nature", "cloud"]} offset={280}>
             </Accordion>
-            <Accordion title="sound" current={sound} func={updateSound} 
-                       options={["harp", "pad", "breath"]} offset={400}>
-            </Accordion>
 
             <TouchableOpacity 
             style={styles.beginButton}

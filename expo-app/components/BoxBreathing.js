@@ -25,7 +25,7 @@ function BoxBreathing ( {endSession} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
+    const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'));
 
     const calculateRadialDist = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))

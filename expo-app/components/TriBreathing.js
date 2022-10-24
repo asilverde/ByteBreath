@@ -6,21 +6,22 @@ import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-function BoxBreathing ( {endSession} ) {
+function TriBreathing ( {endSession} ) {
 
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:0, y:height})).current;
     const [isFollowing, setIsFollowing] = useState(false);
-    const [path, setPath] = useState([[translation.y, -height], [translation.x, 0], [translation.y, height], [translation.x, 0]]);
+    const [path, setPath] = useState([[translation.y, -height / 2], [translation.x, -width], [translation.y, -height / 2], [translation.x, width], [translation.y, height], [translation.x, 0]]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
+    const [timestamp, setTimestamp] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
-                             settings.exhale * 1000, settings.pause * 1000];
-    const breathingPath = ["Inhale", "Pause", "Exhale", "Pause"];
+                             settings.exhale * 1000];
+    const breathingPath = ["Inhale", "Pause", "Exhale"];
     const [currentBreathState, setCurrentBreathState] = useState(0);
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
@@ -92,9 +93,7 @@ function BoxBreathing ( {endSession} ) {
     // Called when user releases contact with circle
     const stopBreathing = () => {
         translation.stopAnimation(({ x, y }) => {
-            setCurrentBreathLength((breathingLength[currentBreathState]) * 
-            (1 - Math.abs(((currentBreathState % 2 == 0) ? y : x) + path[currentBreathState][1]) / 
-            (2 * Math.abs(path[currentBreathState][1]))));
+            setCurrentBreathLength(currentBreathLength - (Date.now() - timestamp));
         });
         pauseAudio();
     }
@@ -113,26 +112,27 @@ function BoxBreathing ( {endSession} ) {
 
     useEffect(() => {
         if(isFollowing) {
+            setTimestamp(Date.now());
             Animated.parallel([
-                Animated.timing(path[currentBreathState][0], {
-                    toValue: path[currentBreathState][1],
+                Animated.timing(path[(2 * currentBreathState)][0], {
+                    toValue: path[(2 * currentBreathState)][1],
                     useNativeDriver: false,
                     duration: currentBreathLength,
                     easing: Easing.linear
                 }),
-                Animated.timing(path[currentBreathState + 1][0], {
-                    toValue: path[currentBreathState + 1][1],
+                Animated.timing(path[(2 * currentBreathState) + 1][0], {
+                    toValue: path[(2 * currentBreathState) + 1][1],
                     useNativeDriver: false,
                     duration: currentBreathLength,
                     easing: Easing.linear
                 })
             ]).start(({finished}) => {
                 if (finished) {
-                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 4]);
-                    if (currentBreathState == 3) {
+                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 3]);
+                    if (currentBreathState == 2) {
                         setScore(score + 1);
                     }
-                    setCurrentBreathState((currentBreathState + 1) % 4);
+                    setCurrentBreathState((currentBreathState + 1) % 3);
                 }
             });
         }
@@ -169,4 +169,4 @@ function BoxBreathing ( {endSession} ) {
     )
 }
 
-export default BoxBreathing
+export default TriBreathing

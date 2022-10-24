@@ -6,7 +6,7 @@ import styles from './Slider.style.js';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-function BoxBreathing ( {endSession} ) {
+function LineBreathing ( {endSession} ) {
 
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
@@ -17,6 +17,7 @@ function BoxBreathing ( {endSession} ) {
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
+    const [timestamp, setTimestamp] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
                              settings.exhale * 1000, settings.pause * 1000];
@@ -92,9 +93,13 @@ function BoxBreathing ( {endSession} ) {
     // Called when user releases contact with circle
     const stopBreathing = () => {
         translation.stopAnimation(({ x, y }) => {
-            setCurrentBreathLength((breathingLength[currentBreathState]) * 
-            (1 - Math.abs(((currentBreathState % 2 == 0) ? y : x) + path[currentBreathState][1]) / 
-            (2 * Math.abs(path[currentBreathState][1]))));
+            if (currentBreathState % 2 == 0) {
+                setCurrentBreathLength((breathingLength[currentBreathState]) * 
+                (1 - Math.abs(y + path[currentBreathState][1]) / 
+                (2 * Math.abs(path[currentBreathState][1]))));
+            } else {
+                setCurrentBreathLength(currentBreathLength - (Date.now() - timestamp));
+            }
         });
         pauseAudio();
     }
@@ -113,6 +118,7 @@ function BoxBreathing ( {endSession} ) {
 
     useEffect(() => {
         if(isFollowing) {
+            setTimestamp(Date.now());
             Animated.timing(path[currentBreathState][0], {
                 toValue: path[currentBreathState][1],
                 useNativeDriver: false,
@@ -161,4 +167,4 @@ function BoxBreathing ( {endSession} ) {
     )
 }
 
-export default BoxBreathing
+export default LineBreathing
