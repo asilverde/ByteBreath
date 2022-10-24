@@ -20,18 +20,30 @@ function Game({ navigation }) {
         if (settings.mode == "box") {
             return <BoxBreathing
                         endSession={(breathCount) => {
-                        AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('End', {breathCount});
+                            if (breathCount == 5) {
+                                AudioPlayer.current.playFromPositionAsync(0);
+                                navigation.navigate('End', {breathCount});
+                            } else {
+                                navigation.navigate('Home');
+                            }
                     }}/>
         } else if (settings.mode == "line") {
             return <LineBreathing endSession={(breathCount) => {
-                        AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('End', {breathCount});
+                            if (breathCount == 5) {
+                                AudioPlayer.current.playFromPositionAsync(0);
+                                navigation.navigate('End', {breathCount});
+                            } else {
+                                navigation.navigate('Home');
+                            }
                     }}/>
         } else {
             return <TriBreathing endSession={(breathCount) => {
-                        AudioPlayer.current.playFromPositionAsync(0);
-                        navigation.navigate('End', {breathCount});
+                            if (breathCount == 5) {
+                                AudioPlayer.current.playFromPositionAsync(0);
+                                navigation.navigate('End', {breathCount});
+                            } else {
+                                navigation.navigate('Home');
+                            }
                     }}/>
         }
     };

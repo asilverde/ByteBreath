@@ -55,7 +55,7 @@ function About({ navigation }) {
             </TouchableOpacity>
             <Text style={[styles.header, {top: 75}]}>
                 <Text style={{fontWeight: "800"}}>what </Text>
-                <Text style={{fontSize: "30"}}>is this? </Text>
+                <Text style={{fontSize: 30}}>is this? </Text>
             </Text>
             <View style={[styles.rectangle1, {top: 140}]}></View>
             <View style={[styles.ellipse1, {top: 140, left: 310}]}></View>
@@ -67,7 +67,7 @@ function About({ navigation }) {
 
             <Text style={[styles.header, {top: 250}]}>
                 <Text style={{fontWeight: "800"}}>how </Text>
-                <Text style={{fontSize: "30"}}>does it work? </Text>
+                <Text style={{fontSize: 30}}>does it work? </Text>
             </Text>
             <View style={[styles.rectangle1, {top: 315}]}></View>
             <View style={[styles.ellipse1, {top: 315, left: 310}]}></View>
@@ -80,7 +80,7 @@ function About({ navigation }) {
 
             <Text style={[styles.header, {top: 425}]}>
                 <Text style={{fontWeight: "800"}}>who </Text>
-                <Text style={{fontSize: "30"}}>should care? </Text>
+                <Text style={{fontSize: 30}}>should care? </Text>
             </Text>
             <View style={[styles.rectangle1, {top: 490}]}></View>
             <View style={[styles.ellipse1, {top: 490, left: 310}]}></View>

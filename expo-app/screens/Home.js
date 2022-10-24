@@ -65,35 +65,3 @@ function Home({ navigation }) {
 }
 
 export default Home
-
-// <View style={styles.header}>
-//                 <TouchableOpacity
-//                 style={styles.smallButton}
-//                 onPress={() => {
-//                     navigation.navigate('About');
-//                 }
-//                 }>
-//                     <AntDesign name="questioncircle" size={24} color="black" />
-//                 </TouchableOpacity>
-//                 <TouchableOpacity
-//                 style={styles.smallButton}
-//                 onPress={() => {
-//                     navigation.navigate('Settings');
-//                 }
-//                 }>
-//                     <Feather name="settings" size={24} color="black" />
-//                 </TouchableOpacity>
-//             </View>
-//             <View style={styles.container}>
-//                 <Text style={styles.title}>BYTE BREATH</Text>
-//                 <TouchableOpacity
-//                 style={styles.button}
-//                 onPress={() => {
-//                     AudioPlayer.current.playFromPositionAsync(0);
-//                     navigation.navigate('Game');
-//                 }
-//                 }>
-//                     <AntDesign name="arrowright" size={30} color="black" />
-//                 </TouchableOpacity>
-//             </View>
-

@@ -13,11 +13,19 @@ export default StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
     },
-    track: {
-        height: '3%',
-        width: '80%',
+    horizontalLine: {
+        height: '2%',
+        width: '65%',
         borderRadius: 40,
-        backgroundColor: 'white',
+        backgroundColor: "white",
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    verticalLine: {
+        height: '62%',
+        width: '4%',
+        borderRadius: 40,
+        backgroundColor: "white",
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -25,15 +33,15 @@ export default StyleSheet.create({
         position: "absolute",
         width: 100,
         height: 50,
-        left: 50,
-        top: 30
+        left: 70,
+        top: 40
     },
     score: {
         position: "absolute",
         width: 100,
         height: 50,
-        left: 300,
-        top: 30,
+        left: 260,
+        top: 40,
     },
     text: {
         fontSize: 32,

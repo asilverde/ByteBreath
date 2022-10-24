@@ -87,7 +87,7 @@ export default StyleSheet.create({
         display: "flex",
         justifyContent: 'center',
         alignItems: "center",
-        letterSpacing: "0.5em"
+        letterSpacing: 0.5
 
     },
     beginButton: {
@@ -133,8 +133,6 @@ export default StyleSheet.create({
         alignItems: "center",
 
         color: "#000000",
-
-        border: "1px solid #000000"
     },
     settingsStyle: {
         /* style */

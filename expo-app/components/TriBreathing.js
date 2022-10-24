@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {ImageBackground, View, Animated, Easing, Vibration, Text, Dimensions} from 'react-native';
+import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions} from 'react-native';
 import styles from './Slider.style.js';
+import { MaterialIcons} from '@expo/vector-icons';
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
@@ -35,7 +36,7 @@ function TriBreathing ( {endSession} ) {
     async function loadSound() {
         await audio.current.unloadAsync();
         audio.current.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-        await audio.current.loadAsync( require('../assets/sounds/BB525.wav'), 
+        await audio.current.loadAsync( require('../assets/sounds/BB-IPE.wav'), 
             {
                 progressUpdateIntervalMillis: 20,
                 positionMillis: 0,
@@ -140,9 +141,27 @@ function TriBreathing ( {endSession} ) {
 
     return (
         <ImageBackground source={backgroundURI}  style={{width: '100%', height: '100%'}}>
+            
             <View style = {styles.container}>
+                <TouchableOpacity
+                style={{
+                    position: "absolute",
+                    left: "2.85%",
+                    right: "14.49%",
+                    top: "3.00%"
+
+                }}
+                onPress={() => {
+                    endSession(score);
+                }
+                }>
+                    <MaterialIcons name="cancel" size={32} color="gray" />
+                </TouchableOpacity>
                 <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
                 <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
+                <View style = {[styles.verticalLine, {height: "50%", position: "absolute", top:210, left:117, transform: [{ rotate: "-21deg" }]}]}></View>
+                <View style = {[styles.horizontalLine, {position: "absolute", top:220}]}></View>
+                <View style = {[styles.verticalLine, {height: "50%", position: "absolute", top:210, left:238, transform: [{ rotate: "21deg" }]}]}></View>
                 <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                     <View 
                     style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
