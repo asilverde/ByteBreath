@@ -42,7 +42,7 @@ export default StyleSheet.create({
         width: "80%",
         height: "30%",
         left: 50,
-        top: 120,
+        top: "15%",
 
         display: 'flex',
         justifyContent: 'center',
@@ -213,6 +213,15 @@ export default StyleSheet.create({
         top: 210,
 
         backgroundColor: "#999999",
+    },
+    homeLine: {
+        position: "absolute",
+        width: "75%",
+        height: "2%",
+        left: "25%",
+        top: "42%",
+
+        backgroundColor: "black",
     },
     ellipse: {
         position: "absolute",

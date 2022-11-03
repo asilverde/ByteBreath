@@ -13,8 +13,8 @@ function Settings({ navigation }) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
 
-    const [mode, setMode] = useState(settings.mode);
-    const [background, setBackground] = useState(settings.background);
+    const [style, setStyle] = useState(settings.style);
+    const [scene, setScene] = useState(settings.background);
     const [sound, setSound] = useState(settings.sound);
 
     const updateSound = (newSound, i) => {
@@ -30,8 +30,8 @@ function Settings({ navigation }) {
             inhale: 5,   
             pause: 2, 
             exhale: 5,  
-            mode: mode, 
-            background: background,
+            style: style, 
+            scene: scene,
             sound: sound,
         }
         dispatch( updateSettings(newSettings) );
@@ -114,7 +114,7 @@ function Settings({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.settingsHeader}>settings</Text>
             <View style={styles.rectangle1}></View>
-            <Accordion title="style" current={mode} func={setMode} 
+            <Accordion title="style" current={style} func={setStyle} 
                        options={["box", "line", "triangle"]} offset={160}>
             </Accordion>
             <Accordion title="scene" current={background} func={setBackground} 

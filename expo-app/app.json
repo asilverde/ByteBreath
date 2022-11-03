@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "ByteBreathe",
-    "slug": "bytebreathe",
-    "version": "1.0.0",
+    "name": "ByteBreath",
+    "slug": "bytebreath",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/sunsation-logo.jpg",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.asilverde.sunsation"
+      "bundleIdentifier": "com.asilverde.bytebreath"
     },
     "android": {
       "adaptiveIcon": {

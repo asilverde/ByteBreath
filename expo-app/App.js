@@ -22,21 +22,7 @@ import { store, persistor } from './redux/state/store';
 
 export default function App() {
     const Stack = createNativeStackNavigator();
-    const [IsReady, SetIsReady] = useState(false);
 
-    const LoadFonts = async () => {
-        await useFonts();
-    };
-
-    if (!IsReady) {
-        return (
-        <AppLoading
-            startAsync={LoadFonts}
-            onFinish={() => SetIsReady(true)}
-            onError={() => {}}
-        />
-        );
-    }
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
