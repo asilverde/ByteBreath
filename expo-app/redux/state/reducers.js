@@ -3,17 +3,15 @@ import { combineReducers } from 'redux';
 
 const settings = (settings = { inhale: 5, exhale: 5, pause: 2, 
                                mode: 'box', scene: 'space',
-                               sound: 'breath', action }) => {
+                               sound: 'breath'}, action) => {
     switch (action.type) {
         case UPDATE_SETTINGS:
-            return  { 
-                        inhale: action.settings.inhale,   
-                        exhale: action.settings.exhale,
-                        pause: action.settings.pause,   
-                        style: action.settings.style, 
-                        scene: action.settings.scene,
-                        sound: action.settings.sound
-                    }
+            return { inhale: action.settings.inhale,   
+                     exhale: action.settings.exhale,
+                     pause: action.settings.pause,   
+                     style: action.settings.style, 
+                     scene: action.settings.scene,
+                     sound: action.settings.sound}
         default:
             return settings;
     }

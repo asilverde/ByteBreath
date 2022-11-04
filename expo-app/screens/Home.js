@@ -1,27 +1,17 @@
 import React, {useRef, useEffect, useCallback, useContext} from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Animated, Easing} from 'react-native';
-import {scale, verticalScale, moderateScale} from "../utils/Scaling.js"
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
 
 import { AntDesign, Feather} from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
-
-const guidelineBaseWidth = 375;
-const guidelineBaseHeight = 667;
-
 // import styles from './Screens.styles.js';
 
 export default function Home({ navigation }) {
     const sizeAnim = useRef(new Animated.Value(moderateScale(70))).current;
-    const [fontsLoaded] = Font.useFonts({
-        'PoppinsRegular': require('../assets/fonts/Poppins-Regular.ttf'),
-        'PoppinsMedium': require('../assets/fonts/Poppins-Medium.ttf'),
-        'PoppinsSemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
-    });
-    const settings = useContext(SettingsContext);
-    console.log(settings.sound);
+
     Animated.loop(
         Animated.sequence([
             Animated.timing(sizeAnim, {
@@ -39,24 +29,10 @@ export default function Home({ navigation }) {
         ])
     ).start()
     
-    useEffect(() => {
-        async function prepare() { await SplashScreen.preventAutoHideAsync(); }
-        prepare();
-    }, []);
-
-    const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded) {
-            await SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
-
-    if (!fontsLoaded) {
-      return null;
-    }
 
     return (
-        <View style={{alignItems: "center"}}onLayout={onLayoutRootView}>
-            <View style={styles.row}></View>
+        <View style={{alignItems: "center"}} >
+            <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
             <View style={styles.row}>
                 <View style={[styles.partition, {width: '20%'}]}>
                     <TouchableOpacity onPress={() => { navigation.navigate('About'); }}>
@@ -74,7 +50,7 @@ export default function Home({ navigation }) {
                     </Animated.Text>
                 </View>
                 <View style={styles.row}>
-                    <View style={[styles.partition, {width: "87.5%"}]}>
+                    <View style={[styles.partition, {justifyContent:"space-between", width: "87.5%"}]}>
                         <View style = {styles.dot}></View>
                         <View style = {styles.dot}></View>
                         <View style = {styles.dot}></View>
@@ -84,7 +60,7 @@ export default function Home({ navigation }) {
                 <View style={styles.body}>
                     <Text style={[styles.bodyText, {fontFamily:"PoppinsSemiBold"}]}>short tactile breathing to relieve anxiety</Text>
                 </View>
-                <View style={[styles.row, {height:verticalScale((1/8) * guidelineBaseHeight), justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
+                <View style={[styles.row, {height:verticalScale((1/8) * baseHeight), justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
                     <View style={[styles.partition, {width: '70%'}]}>
                         <TouchableOpacity 
                         style={styles.begin}
@@ -93,7 +69,7 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={[styles.row, {height:verticalScale((1/10) * guidelineBaseHeight), justifyContent: 'flex-start', alignItems: 'flex-start'}]}>
+                <View style={[styles.row, {height:verticalScale((1/10) * baseHeight), justifyContent: 'flex-start', alignItems: 'flex-start'}]}>
                     <View style={[styles.partition, {width: '70%'}]}>
                         <TouchableOpacity 
                         style={styles.demo}
@@ -111,13 +87,13 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#E5E5E5",
-        height: verticalScale((9/10) * guidelineBaseHeight),
+        height: verticalScale((9/10) * baseHeight),
         width: "100%",
         alignItems: "center",
     },
     row: {
         backgroundColor: "#E5E5E5",
-        height: verticalScale((1/20) * guidelineBaseHeight),
+        height: verticalScale((1/20) * baseHeight),
         width: "100%",
         flexDirection:"row",
         justifyContent: 'flex-end',
@@ -129,8 +105,8 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     title: {
-        width: scale((3/4) * guidelineBaseWidth),
-        height: verticalScale((3/10) * guidelineBaseHeight),
+        width: scale((3/4) * baseWidth),
+        height: verticalScale((3/10) * baseHeight),
         justifyContent: 'flex-end',
     },
     titleText: {
@@ -139,8 +115,8 @@ const styles = StyleSheet.create({
         paddingTop: "10%",
     },
     body: {
-        width: moderateScale((1/2) * guidelineBaseWidth),
-        height: moderateScale((7/20) * guidelineBaseHeight),
+        width: moderateScale((1/2) * baseWidth),
+        height: moderateScale((7/20) * baseHeight),
         justifyContent: 'flex-end',
     },
     bodyText: {
@@ -148,8 +124,8 @@ const styles = StyleSheet.create({
         lineHeight: moderateScale(40),
     },
     begin: {
-        width: moderateScale((1/2) * guidelineBaseWidth), 
-        height: moderateScale((1/12) * guidelineBaseHeight),
+        width: moderateScale((1/2) * baseWidth), 
+        height: moderateScale((1/12) * baseHeight),
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#000000",
@@ -173,110 +149,17 @@ const styles = StyleSheet.create({
 
     },
     line: {
-        width: scale((15/20) * guidelineBaseWidth),
-        height: 10,
-        borderRadius: 20,
+        width: scale((15/20) * baseWidth),
+        height: moderateScale((1/60) * baseHeight),
+        borderTopLeftRadius: 50,
+        borderBottomLeftRadius: 50,
         backgroundColor: "black",
     },
     dot: {
-        width: 12,
-        height: 12,
+        width: moderateScale(12),
+        height: moderateScale(12),
 
         backgroundColor: "black",
         borderRadius: 50
     },
 })
-// import React, {useRef, useCallback} from 'react';
-// import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-
-// import { AntDesign, Feather} from '@expo/vector-icons';
-// import { Audio } from 'expo-av';
-
-// import styles from './Screens.styles.js';
-
-// export default function Home({ navigation }) {
-//     return (
-//         <View style={homeStyle.container}>
-//             <TouchableOpacity
-//             style={{
-//                 position: "absolute",
-//                 left: "75.85%",
-//                 right: "14.49%",
-//                 top: "3.67%",
-                
-//                 background: "#000000"
-//             }}
-//             onPress={() => {
-//                 navigation.navigate('About');
-//             }
-//             }>
-//                 <AntDesign name="questioncircle" size={24} color="gray" />
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//             style={{
-//                 position: "absolute",
-//                 left: "88.19%",
-//                 right: "3.16%",
-//                 top: "3.79%",
-                
-//                 background: "#000000"
-//             }}
-//             onPress={() => {
-//                 navigation.navigate('Settings');
-//             }
-//             }>
-//                 <Feather name="settings" size={24} color="gray" />
-//             </TouchableOpacity>
-//             <View style={homeStyle.title}>
-//                 <Text style={[homeStyle.titleText, {fontFamily: 'Poppins_600SemiBold'}]}>byte breath</Text>
-//             </View>
-//             <View style = {styles.homeLine}></View>
-//             <View style = {[styles.ellipse, {left:"20%", top: "42%"}]}></View>
-//             <View style = {[styles.ellipse, {left:"15%", top: "42%"}]}></View>
-//             <View style={styles.bodyBox}>
-//                 <Text style={styles.bodyText}>short tactile breathing to relieve anxiety</Text>
-//             </View>
-//             <TouchableOpacity 
-//             style={styles.beginButton}
-//             onPress={() => {
-//                 navigation.navigate('Game');
-//             }}>
-//                 <Text style={styles.beginText}>begin</Text>
-//             </TouchableOpacity>
-
-//             <TouchableOpacity 
-//             style={styles.demoTextBox}
-//             onPress={() => {
-//                 navigation.navigate('Demo1');
-//             }}>
-//                 <Text style={styles.demoText}>how to play?</Text>
-//             </TouchableOpacity>
-//         </View>
-//     );
-// }
-
-// const homeStyle = StyleSheet.create({
-//     container: {
-//         backgroundColor: "#E5E5E5",
-//         height: '100%',
-//         width: '100%',
-//         alignItems: 'center',
-//         fontFamily: ' Poppins'
-//     },
-//     title: {
-//         width: "80%",
-//         height: "30%",
-
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//     },
-//     titleText: {
-//         fontFamily: ' Poppins',
-//         fontSize: 80,
-//         lineHeight: 70,
-//         display: 'flex',
-//         alignItems: "center",
-//         justifyContent: 'center'
-//     },
-// })

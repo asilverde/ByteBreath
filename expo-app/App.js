@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -23,13 +23,34 @@ import { store, persistor } from './redux/state/store';
 export default function App() {
     const Stack = createNativeStackNavigator();
 
+    const [fontsLoaded] = Font.useFonts({
+        'PoppinsRegular': require('./assets/fonts/Poppins-Regular.ttf'),
+        'PoppinsMedium': require('./assets/fonts/Poppins-Medium.ttf'),
+        'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
+    });
+
+    useEffect(() => {
+        async function prepare() { await SplashScreen.preventAutoHideAsync(); }
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded) {
+            await SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
+
+    if (!fontsLoaded) {
+      return null;
+    }
+
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home" 
                     screenOptions={{ headerShown: false, cardOverlayEnabled: true}}>
-                        <Stack.Screen name="Home" component={Home} />
+                        <Stack.Screen name="Home" component={Home} onLayout={onLayoutRootView} />
                         <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false}}/>

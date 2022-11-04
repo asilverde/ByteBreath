@@ -17,14 +17,6 @@ function Settings({ navigation }) {
     const [scene, setScene] = useState(settings.background);
     const [sound, setSound] = useState(settings.sound);
 
-    const updateSound = (newSound, i) => {
-        if (sound.includes(newSound)) {
-            setSound(sound.filter(item => item !== newSound));
-        } else {
-            setSound(sound.concat(newSound));
-        }
-    };
-
     const update = () => {
         const newSettings = {
             inhale: 5,   
@@ -112,13 +104,16 @@ function Settings({ navigation }) {
                 }>
                     <MaterialIcons name="cancel" size={32} color="gray" />
             </TouchableOpacity>
-            <Text style={styles.settingsHeader}>settings</Text>
+            <Text style={[styles.settingsHeader, {fontFamily:'PoppinsSemiBold'}]}>settings</Text>
             <View style={styles.rectangle1}></View>
             <Accordion title="style" current={style} func={setStyle} 
                        options={["box", "line", "triangle"]} offset={160}>
             </Accordion>
-            <Accordion title="scene" current={background} func={setBackground} 
+            <Accordion title="scene" current={scene} func={setScene} 
                        options={["space", "nature", "cloud"]} offset={280}>
+            </Accordion>
+            <Accordion title="sound" current={sound} func={setSound} 
+                       options={["breath", "om", "wave"]} offset={400}>
             </Accordion>
 
             <TouchableOpacity 

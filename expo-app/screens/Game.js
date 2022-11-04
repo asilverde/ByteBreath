@@ -15,36 +15,22 @@ function Game({ navigation }) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
 
+    const endSession = (breathCount) => {
+        if (breathCount == 5) {
+            AudioPlayer.current.playFromPositionAsync(0);
+            navigation.navigate('End', {breathCount});
+        } else {
+            navigation.navigate('Home');
+        }
+    }
 
     const gameMode = () => {
         if (settings.mode == "box") {
-            return <BoxBreathing
-                        endSession={(breathCount) => {
-                            if (breathCount == 5) {
-                                AudioPlayer.current.playFromPositionAsync(0);
-                                navigation.navigate('End', {breathCount});
-                            } else {
-                                navigation.navigate('Home');
-                            }
-                    }}/>
+            return <BoxBreathing endSession={endSession}/>
         } else if (settings.mode == "line") {
-            return <LineBreathing endSession={(breathCount) => {
-                            if (breathCount == 5) {
-                                AudioPlayer.current.playFromPositionAsync(0);
-                                navigation.navigate('End', {breathCount});
-                            } else {
-                                navigation.navigate('Home');
-                            }
-                    }}/>
+            return <LineBreathing endSession={endSession}/>
         } else {
-            return <TriBreathing endSession={(breathCount) => {
-                            if (breathCount == 5) {
-                                AudioPlayer.current.playFromPositionAsync(0);
-                                navigation.navigate('End', {breathCount});
-                            } else {
-                                navigation.navigate('Home');
-                            }
-                    }}/>
+            return <TriBreathing endSession={endSession}/>
         }
     };
 
