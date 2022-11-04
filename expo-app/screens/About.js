@@ -2,7 +2,7 @@ import React, {useRef, useEffect, useState, useCallback} from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
 
-import { AntDesign, Feather, MaterialIcons} from '@expo/vector-icons';
+import { AntDesign, Feather} from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
