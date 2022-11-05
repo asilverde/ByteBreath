@@ -39,14 +39,14 @@ export default function App() {
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home" 
                     screenOptions={{ headerShown: false, cardOverlayEnabled: true}}>
-                        <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="About" component={About} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="Demo1" component={Demo1} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="Demo2" component={Demo2} options={{gestureEnabled: false}}/>
-                        <Stack.Screen name="Demo3" component={Demo3} options={{gestureEnabled: false}}/>
+                        <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="End" component={End} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="About" component={About} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="Demo1" component={Demo1} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="Demo2" component={Demo2} options={{gestureEnabled: false, animation: 'fade'}}/>
+                        <Stack.Screen name="Demo3" component={Demo3} options={{gestureEnabled: false, animation: 'fade'}}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </PersistGate>

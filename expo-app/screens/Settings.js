@@ -108,6 +108,7 @@ export default function Settings({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style={[styles.row, {height: verticalScale((1/40) * baseHeight)}]}></View>
             <View style={styles.container}>
                 <View style={[styles.row, {height: verticalScale((1/10) * baseHeight), alignItems: "flex-end"}]}>
                     <Text style={[styles.headerText, {fontFamily:'PoppinsSemiBold', padding: moderateScale(10)}]}>settings</Text>

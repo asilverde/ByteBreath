@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
         height: moderateScale(8),
         width: '100%',
         top:"25%",
-        borderRadius: 40,
+        borderRadius: 10,
         backgroundColor: '#777777'
     },
     triangleLine: {
