@@ -15,21 +15,20 @@ export default function LineBreathing ( {endSession} ) {
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:0, y:height})).current;
     const [isFollowing, setIsFollowing] = useState(false);
-    const [path, setPath] = useState([[translation.y, -height], [translation.x, 0], [translation.y, height], [translation.x, 0]]);
+    const [path, setPath] = useState([[translation.y, -height], [translation.y, height]]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
     const [timestamp, setTimestamp] = useState(0);
 
-    const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
-                             settings.exhale * 1000, settings.pause * 1000];
-    const breathingPath = ["Inhale", "Pause", "Exhale", "Pause"];
+    const breathingLength = [settings.inhale * 1000, settings.exhale * 1000];
+    const breathingPath = ["Inhale", "Exhale"];
     const [currentBreathState, setCurrentBreathState] = useState(0);
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
+    const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
 
     const calculateRadialDist = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -96,13 +95,8 @@ export default function LineBreathing ( {endSession} ) {
     // Called when user releases contact with circle
     const stopBreathing = () => {
         translation.stopAnimation(({ x, y }) => {
-            if (currentBreathState % 2 == 0) {
-                setCurrentBreathLength((breathingLength[currentBreathState]) * 
-                (1 - Math.abs(y + path[currentBreathState][1]) / 
-                (2 * Math.abs(path[currentBreathState][1]))));
-            } else {
-                setCurrentBreathLength(currentBreathLength - (Date.now() - timestamp));
-            }
+            setCurrentBreathLength((breathingLength[currentBreathState]) * 
+            (Math.abs(path[currentBreathState][1] - y) / (2 * Math.abs(path[currentBreathState][1]))));
         });
         pauseAudio();
     }
@@ -129,55 +123,59 @@ export default function LineBreathing ( {endSession} ) {
                 easing: Easing.linear
             }).start(({finished}) => {
                 if (finished) {
-                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 4]);
-                    if (currentBreathState == 3) {
+                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 2]);
+                    if (currentBreathState == 1) {
                         setScore(score + 1);
                     }
-                    setCurrentBreathState((currentBreathState + 1) % 4);
+                    setCurrentBreathState((currentBreathState + 1) % 2);
                 }
             });
         }
     }, [isFollowing, currentBreathState]);
 
     return (
-        <ImageBackground source={backgroundURI}  style={{alignItems: "center", width: '100%', height: '100%'}}>
-            <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
-            <View style={[styles.row, {justifyContent: 'space-between'}]}>
-                <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
-                    <TouchableOpacity onPress={() => { endSession(score); } }>
-                        <AntDesign name="close" size={24} color="black" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-                    
-            <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
-
-            <View style = {styles.container}>
-                <View style={styles.verticalLine}></View>
-                <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
-                    <View 
-                    style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
-                    ]}
-                    onStartShouldSetResponder={() => true}
-                    onResponderStart={() => {
-                        startBreathing();
-                    }}
-                    onResponderMove={(event) => {
-                        if (event.nativeEvent.touches.length < 2) {
-                            const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
-                            if (radialDist > 60 && isFollowing) {
-                                stopBreathing();
-                            }
-                        }
-                    }}
-                    onResponderRelease={() => {
-                        stopBreathing();
-                    }}>
+        <Animated.View style = {{opacity:translation.y.interpolate({
+            inputRange: [-height, height],
+            outputRange: [0.7, 1] })}}>
+            <ImageBackground source={backgroundURI}  style={{alignItems: "center", width: '100%', height: '100%'}}>
+                <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
+                <View style={[styles.row, {justifyContent: 'space-between'}]}>
+                    <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
+                        <TouchableOpacity onPress={() => { endSession(score); } }>
+                            <AntDesign name="close" size={24} color="#777777" />
+                        </TouchableOpacity>
                     </View>
-                </Animated.View>
-            </View>
-        </ImageBackground>
+                </View>
+                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
+                        
+                <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
+
+                <View style = {styles.container}>
+                    <View style={styles.verticalLine}></View>
+                    <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
+                        <View 
+                        style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
+                        ]}
+                        onStartShouldSetResponder={() => true}
+                        onResponderStart={() => {
+                            startBreathing();
+                        }}
+                        onResponderMove={(event) => {
+                            if (event.nativeEvent.touches.length < 2) {
+                                const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
+                                if (radialDist > 60 && isFollowing) {
+                                    stopBreathing();
+                                }
+                            }
+                        }}
+                        onResponderRelease={() => {
+                            stopBreathing();
+                        }}>
+                        </View>
+                    </Animated.View>
+                </View>
+            </ImageBackground>
+        </Animated.View>
     )
 }
 

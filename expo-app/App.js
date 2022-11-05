@@ -29,17 +29,6 @@ export default function App() {
         'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
     });
 
-    useEffect(() => {
-        async function prepare() { await SplashScreen.preventAutoHideAsync(); }
-        prepare();
-    }, []);
-
-    const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded) {
-            await SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
-
     if (!fontsLoaded) {
       return null;
     }
@@ -50,7 +39,7 @@ export default function App() {
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home" 
                     screenOptions={{ headerShown: false, cardOverlayEnabled: true}}>
-                        <Stack.Screen name="Home" component={Home} onLayout={onLayoutRootView} />
+                        <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="Game" component={Game} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="End" component={End} options={{gestureEnabled: false}}/>
                         <Stack.Screen name="Settings" component={Settings} options={{gestureEnabled: false}}/>

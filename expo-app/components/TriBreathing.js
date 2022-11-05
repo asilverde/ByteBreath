@@ -27,7 +27,7 @@ export default function TriBreathing ( {endSession} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
+    const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
 
     const pythagorean = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -152,7 +152,7 @@ export default function TriBreathing ( {endSession} ) {
                 <View style={[styles.row, {justifyContent: 'space-between'}]}>
                     <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
                         <TouchableOpacity onPress={() => { endSession(score); } }>
-                            <AntDesign name="close" size={24} color="black" />
+                            <AntDesign name="close" size={24} color="#777777" />
                         </TouchableOpacity>
                     </View>
                 </View>
