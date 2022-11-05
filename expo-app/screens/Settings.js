@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { Icon, Animated, LayoutAnimation, Text, View, TouchableOpacity } from 'react-native';
+import { Icon, ImageBackground, Animated, LayoutAnimation, Text, View, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSettings } from '../redux/actions/breathSettings';
 import { AntDesign, Feather } from '@expo/vector-icons';
@@ -34,7 +34,7 @@ export default function Settings({ navigation }) {
         dispatch( updateSettings(newSettings) );
     };
 
-    const Accordion = ({ title, current, func, options, offset}) => {
+    const Accordion = ({ title, current, func, options, background}) => {
         const [open, setOpen] = useState(false);
         const animatedController = useRef(new Animated.Value(0)).current;
     
@@ -73,17 +73,19 @@ export default function Settings({ navigation }) {
                     <Text style={styles.currentDisplay}>{current}</Text>
                 </View>
             </View>
-            <View style={[styles.line, {height: scale((1/100) * baseHeight)}]}></View>
+            <View style={[styles.line, {height: scale((1/200) * baseHeight)}]}></View>
             <Animated.View style={[styles.settingsRow, {overflow:"hidden", height: bodyHeight }]}>
                 {options.map((choice, index) =>
-                    <TouchableOpacity
-                    key={index}
-                    style={[styles.optionButton, {borderWidth: (choice == current) ? 2.5 : 0.5}]} 
-                    onPress={() => { 
-                        func(choice) 
-                    }}>
-                        <Text>{choice}</Text>
-                    </TouchableOpacity>
+                    <ImageBackground source={background[index]}>
+                        <TouchableOpacity
+                        key={index}
+                        style={[styles.optionButton, { 
+                        borderWidth: (choice == current) ? 2 : 0.5}]} 
+                        onPress={() => { 
+                            func(choice) 
+                        }}>
+                        </TouchableOpacity>
+                    </ImageBackground>
                 )}
             </Animated.View>
           </View>
@@ -123,13 +125,14 @@ export default function Settings({ navigation }) {
                 </View>
 
                 <Accordion title="style" current={style} func={setStyle} 
-                        options={["box", "line", "triangle"]} offset={160}>
+                        options={["box", "line", "triangle"]} 
+                        background={[require('../assets/settings-icons/box.png'), require('../assets/settings-icons/line.png'), require('../assets/settings-icons/circle.png')]}>
                 </Accordion>
                 <Accordion title="scene" current={scene} func={setScene} 
-                        options={["space", "nature", "cloud"]} offset={280}>
+                        options={["space", "nature", "cloud"]} background={[require('../assets/backgrounds/space2.png'), require('../assets/backgrounds/nature.jpg'), require('../assets/backgrounds/cloud.jpg')]}>
                 </Accordion>
                 <Accordion title="sound" current={sound} func={setSound} 
-                        options={["breath", "om", "wave"]} offset={400}>
+                        options={["breath", "om", "wave"]} background={[require('../assets/settings-icons/breath.png'), require('../assets/settings-icons/breath.png'), require('../assets/settings-icons/wave.png')]}>
                 </Accordion>
 
                 <View style={[styles.row, {justifyContent:"flex-start", height:verticalScale((1/9) * baseHeight), justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
