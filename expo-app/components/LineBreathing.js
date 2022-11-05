@@ -1,13 +1,15 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions} from 'react-native';
-import styles from './Slider.style.js';
+import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
 import { MaterialIcons} from '@expo/vector-icons';
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
+import { AntDesign } from '@expo/vector-icons';
+
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-function LineBreathing ( {endSession} ) {
+export default function LineBreathing ( {endSession} ) {
 
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
@@ -138,25 +140,21 @@ function LineBreathing ( {endSession} ) {
     }, [isFollowing, currentBreathState]);
 
     return (
-        <ImageBackground source={backgroundURI}  style={{width: '100%', height: '100%'}}>
-            <View style = {styles.container}>
-                <TouchableOpacity
-                style={{
-                    position: "absolute",
-                    left: "2.85%",
-                    right: "14.49%",
-                    top: "3.00%"
+        <ImageBackground source={backgroundURI}  style={{alignItems: "center", width: '100%', height: '100%'}}>
+            <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
+            <View style={[styles.row, {justifyContent: 'space-between'}]}>
+                <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
+                    <TouchableOpacity onPress={() => { endSession(score); } }>
+                        <AntDesign name="close" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
+                    
+            <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
 
-                }}
-                onPress={() => {
-                    endSession(score);
-                }
-                }>
-                    <MaterialIcons name="cancel" size={32} color="gray" />
-                </TouchableOpacity>
-                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-                <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
-                <View style = {[styles.verticalLine, {position: "absolute", left:180}]}></View>
+            <View style = {styles.container}>
+                <View style={styles.verticalLine}></View>
                 <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                     <View 
                     style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
@@ -183,4 +181,64 @@ function LineBreathing ( {endSession} ) {
     )
 }
 
-export default LineBreathing
+
+const styles = StyleSheet.create({
+    container: {
+        height: "62%",
+        width: "62%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderColor: "#777777"
+    },
+    row: {
+        height: verticalScale((1/20) * baseHeight),
+        width: "100%",
+        flexDirection:"row",
+        justifyContent: 'flex-start',
+        alignItems: "center",
+    },
+    partition: {
+        flexDirection:"row", 
+        justifyContent: 'space-evenly',
+        alignItems: "flex-start",
+    },
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    command: {
+        fontSize: scale(30),
+        lineHeight: scale(60),
+        fontFamily: "PoppinsMedium",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    text: {
+        justifyContent:"center",
+        fontSize: 32,
+        fontWeight: "bold",
+        color: '#777777',
+        fontFamily: "PoppinsMedium",
+    },
+    button: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+    },
+    touch: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+        borderColor: "black",
+        borderWidth: 5
+    },
+    verticalLine: {
+        position: "absolute",
+        height: '100%',
+        width: '3%',
+        borderRadius: 40,
+        backgroundColor: "gray"
+    },
+})
+
+

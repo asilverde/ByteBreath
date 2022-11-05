@@ -17,17 +17,13 @@ export default StyleSheet.create({
         height: '2%',
         width: '65%',
         borderRadius: 40,
-        backgroundColor: "white",
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: "white"
     },
     verticalLine: {
         height: '62%',
         width: '4%',
         borderRadius: 40,
-        backgroundColor: "white",
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: "white"
     },
     command: {
         position: "absolute",

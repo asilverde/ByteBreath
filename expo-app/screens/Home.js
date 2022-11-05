@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useCallback, useContext} from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Animated, Easing} from 'react-native';
 import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
+import { useSelector, useDispatch } from 'react-redux';
 
 import { AntDesign, Feather} from '@expo/vector-icons';
 import { Audio } from 'expo-av';
@@ -11,6 +12,8 @@ import * as Font from 'expo-font';
 
 export default function Home({ navigation }) {
     const sizeAnim = useRef(new Animated.Value(moderateScale(70))).current;
+    const dispatch = useDispatch();
+    const settings = useSelector( state => state.settings );
 
     Animated.loop(
         Animated.sequence([
@@ -64,7 +67,9 @@ export default function Home({ navigation }) {
                     <View style={[styles.partition, {width: '70%'}]}>
                         <TouchableOpacity 
                         style={styles.begin}
-                        onPress={() => { navigation.navigate('Game'); }}>
+                        onPress={() => { 
+                            navigation.navigate("Game");
+                         }}>
                             <Text style={[styles.beginText, {fontFamily:"PoppinsMedium"}]}>begin</Text>
                         </TouchableOpacity>
                     </View>

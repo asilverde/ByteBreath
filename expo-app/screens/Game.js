@@ -15,6 +15,8 @@ function Game({ navigation }) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
 
+    const audioFile = (settings.sound === 'breath') ? require('../assets/sounds/box-breath.wav') : ((settings.sound === 'om') ? require('../assets/sounds/box-om.wav') : require('../assets/sounds/box-wave.wav'))
+
     const endSession = (breathCount) => {
         if (breathCount == 5) {
             AudioPlayer.current.playFromPositionAsync(0);
@@ -25,9 +27,9 @@ function Game({ navigation }) {
     }
 
     const gameMode = () => {
-        if (settings.mode == "box") {
-            return <BoxBreathing endSession={endSession}/>
-        } else if (settings.mode == "line") {
+        if (settings.style == "box") {
+            return <BoxBreathing endSession={endSession} audioFile={audioFile}/>
+        } else if (settings.style == "line") {
             return <LineBreathing endSession={endSession}/>
         } else {
             return <TriBreathing endSession={endSession}/>

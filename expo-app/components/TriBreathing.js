@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions} from 'react-native';
-import styles from './Slider.style.js';
-import { MaterialIcons} from '@expo/vector-icons';
+import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-function TriBreathing ( {endSession} ) {
+export default function TriBreathing ( {endSession} ) {
 
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
@@ -29,7 +29,7 @@ function TriBreathing ( {endSession} ) {
     const audio = useRef(new Audio.Sound());
     const backgroundURI = (settings.background == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.background == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
 
-    const calculateRadialDist = (x_dist, y_dist) => {
+    const pythagorean = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
     }
 
@@ -94,7 +94,11 @@ function TriBreathing ( {endSession} ) {
     // Called when user releases contact with circle
     const stopBreathing = () => {
         translation.stopAnimation(({ x, y }) => {
-            setCurrentBreathLength(currentBreathLength - (Date.now() - timestamp));
+            const prevState = (((currentBreathState - 1) % 3) + 3) % 3;
+            const ydiff = y - path[2*currentBreathState][1];
+            const xdiff = x - path[2*currentBreathState + 1][1];
+            setCurrentBreathLength(breathingLength[currentBreathState] * 
+            Math.abs(pythagorean(xdiff, ydiff)) / Math.abs(pythagorean(path[2*currentBreathState][1] - path[2*prevState][1], path[2*currentBreathState + 1][1] - path[2*prevState+1][1])));
         });
         pauseAudio();
     }
@@ -138,54 +142,137 @@ function TriBreathing ( {endSession} ) {
             });
         }
     }, [isFollowing, currentBreathState]);
-
+    
     return (
-        <ImageBackground source={backgroundURI}  style={{width: '100%', height: '100%'}}>
-            
-            <View style = {styles.container}>
-                <TouchableOpacity
-                style={{
-                    position: "absolute",
-                    left: "2.85%",
-                    right: "14.49%",
-                    top: "3.00%"
-
-                }}
-                onPress={() => {
-                    endSession(score);
-                }
-                }>
-                    <MaterialIcons name="cancel" size={32} color="gray" />
-                </TouchableOpacity>
-                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-                <View style = {styles.score} ><Text style = {styles.text}>{(score >= 0 ) ? score : 0}</Text></View>
-                <View style = {[styles.verticalLine, {height: "50%", position: "absolute", top:210, left:117, transform: [{ rotate: "-21deg" }]}]}></View>
-                <View style = {[styles.horizontalLine, {position: "absolute", top:220}]}></View>
-                <View style = {[styles.verticalLine, {height: "50%", position: "absolute", top:210, left:238, transform: [{ rotate: "21deg" }]}]}></View>
-                <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
-                    <View 
-                    style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
-                    ]}
-                    onStartShouldSetResponder={() => true}
-                    onResponderStart={() => {
-                        startBreathing();
-                    }}
-                    onResponderMove={(event) => {
-                        if (event.nativeEvent.touches.length < 2) {
-                            const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
-                            if (radialDist > 60 && isFollowing) {
-                                stopBreathing();
-                            }
-                        }
-                    }}
-                    onResponderRelease={() => {
-                        stopBreathing();
-                    }}>
+        <Animated.View style = {{opacity:translation.y.interpolate({
+            inputRange: [-height, height],
+            outputRange: [0.7, 1] })}}>
+            <ImageBackground source={backgroundURI} style={{alignItems: "center", width:"100%", height:"100%"}}>
+                <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
+                <View style={[styles.row, {justifyContent: 'space-between'}]}>
+                    <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
+                        <TouchableOpacity onPress={() => { endSession(score); } }>
+                            <AntDesign name="close" size={24} color="black" />
+                        </TouchableOpacity>
                     </View>
-                </Animated.View>
-            </View>
-        </ImageBackground>
+                </View>
+                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
+                        
+                <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
+            
+                <View style = {styles.container}>
+                    <View style = {[styles.triangleLine, 
+                    {   height: (100 * pythagorean(width, height*1.5) / (2 * height)) + "%",
+                        transform: [
+                            {translateY: (pythagorean(width, height*1.5) / 2) },
+                            {rotate: "-" + (Math.asin(width / pythagorean(width, height*1.55))) + "rad"},
+                            {translateY: -(pythagorean(width, height*1.65) / 2) },
+                            {translateX: 0.02 * width}
+                        ]
+                    }]}></View>
+                    <View style = {[styles.triangleLine,
+                    {   height: (100 * pythagorean(width, height*1.5) / (2 * height)) + "%",
+                        transform: [
+                            {translateY: (pythagorean(width, height*1.5) / 2) },
+                            {rotate: (Math.asin(width / pythagorean(width, height*1.55))) + "rad"},
+                            {translateY: -(pythagorean(width, height*1.65) / 2) },
+                            {translateX: -0.02 * width}
+                        ]
+                    }]}></View>
+                    <View style = {styles.horizontalLine}></View>
+                    <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
+                        <View 
+                        style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
+                        ]}
+                        onStartShouldSetResponder={() => true}
+                        onResponderStart={() => {
+                            startBreathing();
+                        }}
+                        onResponderMove={(event) => {
+                            if (event.nativeEvent.touches.length < 2) {
+                                const radialDist = pythagorean(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
+                                if (radialDist > 60 && isFollowing) {
+                                    stopBreathing();
+                                }
+                            }
+                        }}
+                        onResponderRelease={() => {
+                            stopBreathing();
+                        }}>
+                        </View>
+                    </Animated.View>
+                </View>
+            </ImageBackground>
+        </Animated.View>
     )
 }
 
-export default TriBreathing
+
+const styles = StyleSheet.create({
+    container: {
+        height: "62%",
+        width: "62%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    row: {
+        height: verticalScale((1/20) * baseHeight),
+        width: "100%",
+        flexDirection:"row",
+        justifyContent: 'flex-start',
+        alignItems: "center",
+    },
+    partition: {
+        flexDirection:"row", 
+        justifyContent: 'space-evenly',
+        alignItems: "flex-start",
+    },
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    horizontalLine: {
+        position: "absolute", 
+        height: moderateScale(8),
+        width: '100%',
+        top:"25%",
+        borderRadius: 40,
+        backgroundColor: '#777777'
+    },
+    triangleLine: {
+        position: "absolute", 
+        height: "80%", 
+        width: moderateScale(8),
+        top:"25%",
+        borderRadius: 40,
+        backgroundColor: '#777777'     
+    },
+    command: {
+        fontSize: scale(30),
+        lineHeight: scale(60),
+        fontFamily: "PoppinsMedium",
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    text: {
+        justifyContent:"center",
+        fontSize: 32,
+        fontWeight: "bold",
+        color: '#777777',
+        fontFamily: "PoppinsMedium",
+    },
+    button: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+    },
+    touch: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+        borderColor: "black",
+        borderWidth: 5
+    }
+})
+
+

@@ -17,7 +17,7 @@ const defaultSettings = {
 export default function Settings({ navigation }) {
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
-    console.log(settings)
+
     const [style, setStyle] = useState(settings.style);
     const [scene, setScene] = useState(settings.scene);
     const [sound, setSound] = useState(settings.sound);
@@ -40,7 +40,7 @@ export default function Settings({ navigation }) {
     
         const bodyHeight = animatedController.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, 80],
+            outputRange: [0, moderateScale(80)],
         });
       
         const toggleOpen = () => {
@@ -61,7 +61,7 @@ export default function Settings({ navigation }) {
         };
       
         return (
-          <View style={{width: "100%", height: verticalScale((1/5) * baseHeight)}}>
+          <View style={{width: "100%", height: verticalScale((1/5.5) * baseHeight)}}>
             <View style={[styles.row, { width: scale((8.5/10) * baseWidth), height: verticalScale((1/15) * baseHeight),
                           justifyContent: 'space-evenly', alignItems: "flex-end",}]}>
                 <View style={[styles.partition, {justifyContent: 'space-between', width: "50%"}]}>
@@ -69,14 +69,15 @@ export default function Settings({ navigation }) {
                         <Text style={[styles.settingTitle]}>{title}</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={[styles.partition, {justifyContent: 'space-between', width: "20%"}]}>
+                <View style={[styles.partition, {width: "20%", paddingTop:scale(10)}]}>
                     <Text style={styles.currentDisplay}>{current}</Text>
                 </View>
             </View>
             <View style={[styles.line, {height: scale((1/100) * baseHeight)}]}></View>
             <Animated.View style={[styles.settingsRow, {overflow:"hidden", height: bodyHeight }]}>
-                {options.map((choice) =>
+                {options.map((choice, index) =>
                     <TouchableOpacity
+                    key={index}
                     style={[styles.optionButton, {borderWidth: (choice == current) ? 2.5 : 0.5}]} 
                     onPress={() => { 
                         func(choice) 
@@ -92,7 +93,7 @@ export default function Settings({ navigation }) {
     return (
         <View>
             <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
-            <View style={[styles.row, {justifyContent: 'space-between', }]}>
+            <View style={[styles.row, {justifyContent: 'space-between'}]}>
                 <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
                     <TouchableOpacity onPress={() => { update(); navigation.navigate('Home') } }>
                         <AntDesign name="close" size={24} color="black" />
@@ -111,8 +112,8 @@ export default function Settings({ navigation }) {
                 <View style={[styles.row, {height: verticalScale((1/10) * baseHeight), alignItems: "flex-end"}]}>
                     <Text style={[styles.headerText, {fontFamily:'PoppinsSemiBold', padding: moderateScale(10)}]}>settings</Text>
                 </View>
-                <View style={[styles.row, {alignItems: "flex-start"}]}>
-                    <View style={[styles.partition, {width: "87.5%"}]}>
+                <View style={[styles.row, {height: verticalScale((1/15) * baseHeight), alignItems: "flex-start"}]}>
+                    <View style={[styles.partition, {width: "87.5%", justifyContent:"space-between"}]}>
                         <View style = {styles.line}></View>
                         <View style = {styles.dot}></View>
                         <View style = {styles.dot}></View>
@@ -130,7 +131,7 @@ export default function Settings({ navigation }) {
                         options={["breath", "om", "wave"]} offset={400}>
                 </Accordion>
 
-                <View style={[styles.row, {height:verticalScale((1/8) * baseHeight), justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
+                <View style={[styles.row, {justifyContent:"flex-start", height:verticalScale((1/9) * baseHeight), justifyContent: 'flex-start', alignItems: 'flex-end'}]}>
                     <View style={[styles.partition, {width: '70%', }]}>
                         <TouchableOpacity 
                         style={styles.beginButton}
@@ -177,13 +178,13 @@ const styles = StyleSheet.create({
         fontFamily: "PoppinsSemiBold"
     },
     settingTitle: {
-        fontSize: scale(30),
-        lineHeight: scale(60),
+        fontSize: moderateScale(30),
+        lineHeight: moderateScale(60),
         fontFamily: "PoppinsMedium"
     },
     currentDisplay: {
-        fontSize: scale(15),
-        lineHeight: scale(40),
+        fontSize: moderateScale(15),
+        lineHeight: moderateScale(40),
         fontFamily: "PoppinsRegular"
     },
     settingsRow: {
@@ -197,8 +198,8 @@ const styles = StyleSheet.create({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width:60,
-        height:60,
+        width:moderateScale(60, 0.25),
+        height:moderateScale(60, 0.25),
         borderColor: "black",
         borderWidth: 0.5,
     },
