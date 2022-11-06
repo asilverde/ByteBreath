@@ -30,8 +30,16 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     const audio = useRef(new Audio.Sound());
     const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'));
 
-    const calculateRadialDist = (x_dist, y_dist) => {
-        return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
+    const pythagorean = (x_dist, y_dist) => {
+        return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2));
+    }
+
+    const getScoreView = () => {
+        let colors = ["black", "black", "black", "black", "black"];
+        for (var i = 0; i < score; i++) {
+            colors[i] = "#777777";
+        }
+        return colors;
     }
 
     async function loadSound() {
@@ -137,7 +145,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     return (
         <Animated.View style = {{opacity:translation.y.interpolate({
             inputRange: [-height, height],
-            outputRange: [0.8, 1],
+            outputRange: [0.7, 1],
           })}}>
             <ImageBackground source={backgroundURI}  style={{alignItems: "center", width: '100%', height: '100%'}}>
                 <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
@@ -148,9 +156,13 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-                        
-                <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
+                <View style = {styles.command}>
+                    <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
+                        inputRange: [-height, height],
+                        outputRange: [scale(40), scale(30)],
+                    })}]}>{breathingPath[currentBreathState]}</Animated.Text>
+                </View>
+                    
                 <View style = {styles.container}>
                     <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                         <View 
@@ -162,7 +174,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                         }}
                         onResponderMove={(event) => {
                             if (event.nativeEvent.touches.length < 2) {
-                                const radialDist = calculateRadialDist(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
+                                const radialDist = pythagorean(event.nativeEvent.locationX - 60, event.nativeEvent.locationY - 60);
                                 if (radialDist > 60 && isFollowing) {
                                     stopBreathing();
                                 }
@@ -173,6 +185,13 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                         }}>
                         </View>
                     </Animated.View>
+                </View>
+                <View style={[styles.row, {justifyContent: 'center', alignItems: "flex-end", height: verticalScale((1/10) * baseHeight)}]}>
+                    <View style={[styles.partition, {width: "40%"}]}>
+                        {getScoreView().map((color, index) =>
+                            <View style={[styles.dot, {backgroundColor:color}]} key={index}></View>
+                        )}  
+                    </View>
                 </View>
             </ImageBackground>
         </Animated.View>
@@ -206,17 +225,16 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     command: {
-        fontSize: scale(30),
-        lineHeight: scale(60),
-        fontFamily: "PoppinsMedium",
-        justifyContent:"center",
+        width: "50%",
+        height: "15%",
+        justifyContent:"flex-start",
         alignItems:"center"
     },
     text: {
         justifyContent:"center",
-        fontSize: 32,
         fontWeight: "bold",
         color: '#777777',
+        fontSize: scale(30),
         fontFamily: "PoppinsMedium",
     },
     button: {
@@ -230,6 +248,10 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderColor: "black",
         borderWidth: 5
-    }
+    },
+    dot: {
+        width: moderateScale(20),
+        height: moderateScale(20),
+        borderRadius: 100,
+    },
 })
-

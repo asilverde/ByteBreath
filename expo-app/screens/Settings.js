@@ -76,7 +76,7 @@ export default function Settings({ navigation }) {
             <View style={[styles.line, {height: scale((1/200) * baseHeight)}]}></View>
             <Animated.View style={[styles.settingsRow, {overflow:"hidden", height: bodyHeight }]}>
                 {options.map((choice, index) =>
-                    <ImageBackground source={background[index]}>
+                    <ImageBackground key={index} source={background[index]}>
                         <TouchableOpacity
                         key={index}
                         style={[styles.optionButton, { 

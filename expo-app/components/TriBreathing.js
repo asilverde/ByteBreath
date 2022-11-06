@@ -7,7 +7,7 @@ import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../uti
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
-export default function TriBreathing ( {endSession} ) {
+export default function TriBreathing ( {endSession, audioFile} ) {
 
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
@@ -33,10 +33,18 @@ export default function TriBreathing ( {endSession} ) {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
     }
 
+    const getScoreView = () => {
+        let colors = ["black", "black", "black", "black", "black"];
+        for (var i = 0; i < score; i++) {
+            colors[i] = "#777777";
+        }
+        return colors;
+    }
+
     async function loadSound() {
         await audio.current.unloadAsync();
         audio.current.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-        await audio.current.loadAsync( require('../assets/sounds/BB-IPE.wav'), 
+        await audio.current.loadAsync( audioFile, 
             {
                 progressUpdateIntervalMillis: 20,
                 positionMillis: 0,
@@ -156,9 +164,12 @@ export default function TriBreathing ( {endSession} ) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style = {styles.command} ><Text style = {styles.text}>{breathingPath[currentBreathState]}</Text></View>
-                        
-                <View style={[styles.row, {height: verticalScale((1/10) * baseHeight)}]}></View>
+                <View style = {styles.command}>
+                    <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
+                        inputRange: [-height, height],
+                        outputRange: [scale(40), scale(30)],
+                    })}]}>{breathingPath[currentBreathState]}</Animated.Text>
+                </View>
             
                 <View style = {styles.container}>
                     <View style = {[styles.triangleLine, 
@@ -202,6 +213,14 @@ export default function TriBreathing ( {endSession} ) {
                         </View>
                     </Animated.View>
                 </View>
+
+                <View style={[styles.row, {justifyContent: 'center', alignItems: "flex-end", height: verticalScale((1/10) * baseHeight)}]}>
+                    <View style={[styles.partition, {width: "40%"}]}>
+                        {getScoreView().map((color, index) =>
+                            <View style={[styles.dot, {backgroundColor:color}]} key={index}></View>
+                        )}  
+                    </View>
+                </View>
             </ImageBackground>
         </Animated.View>
     )
@@ -214,6 +233,7 @@ const styles = StyleSheet.create({
         width: "62%",
         alignItems: "center",
         justifyContent: "center",
+        top:scale(-20)
     },
     row: {
         height: verticalScale((1/20) * baseHeight),
@@ -248,17 +268,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#777777'     
     },
     command: {
-        fontSize: scale(30),
-        lineHeight: scale(60),
-        fontFamily: "PoppinsMedium",
-        justifyContent:"center",
+        width: "50%",
+        height: "15%",
+        justifyContent:"flex-start",
         alignItems:"center"
     },
     text: {
         justifyContent:"center",
-        fontSize: 32,
         fontWeight: "bold",
         color: '#777777',
+        fontSize: scale(30),
         fontFamily: "PoppinsMedium",
     },
     button: {
@@ -272,6 +291,11 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderColor: "black",
         borderWidth: 5
+    },
+    dot: {
+        width: moderateScale(20),
+        height: moderateScale(20),
+        borderRadius: 100,
     }
 })
 
