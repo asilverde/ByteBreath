@@ -11,27 +11,8 @@ import * as Font from 'expo-font';
 // import styles from './Screens.styles.js';
 
 export default function Home({ navigation }) {
-    const sizeAnim = useRef(new Animated.Value(moderateScale(70))).current;
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
-
-    Animated.loop(
-        Animated.sequence([
-            Animated.timing(sizeAnim, {
-                toValue: moderateScale(80),
-                duration: 5000,
-                useNativeDriver: false,
-                easing: Easing.ease
-            }),
-            Animated.timing(sizeAnim, {
-                toValue: moderateScale(70),
-                duration: 5000,
-                useNativeDriver: false,
-                easing: Easing.ease
-            })
-        ])
-    ).start()
-    
 
     return (
         <View style={{alignItems: "center"}} >
@@ -48,9 +29,9 @@ export default function Home({ navigation }) {
             </View>
             <View style={styles.container}>
                 <View style={styles.title}>
-                    <Animated.Text style={[styles.titleText, {fontSize: sizeAnim, lineHeight: sizeAnim,fontFamily:"PoppinsSemiBold"}]}>
+                    <Text style={[styles.titleText, {fontFamily:"PoppinsSemiBold"}]}>
                         byte breath
-                    </Animated.Text>
+                    </Text>
                 </View>
                 <View style={styles.row}>
                     <View style={[styles.partition, {justifyContent:"space-between", width: "87.5%"}]}>
@@ -129,9 +110,8 @@ const styles = StyleSheet.create({
         lineHeight: moderateScale(40),
     },
     begin: {
-        width: moderateScale((1/2) * baseWidth), 
-        height: moderateScale((1/12) * baseHeight),
-        justifyContent: "center",
+        width: moderateScale((1/2) * baseWidth),
+        justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "#000000",
         borderRadius: 38,

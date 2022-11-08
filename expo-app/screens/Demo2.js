@@ -68,7 +68,7 @@ export default function Demo2({ navigation }) {
                         })
                     }]}>
                       <View style={styles.demoEllipse}></View>
-                        <Svg width="150" height="250" viewBox="0 0 150 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <Svg width={moderateScale(150)} height={moderateScale(250)} viewBox="0 0 150 250" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <Path d="M0 98.4839H139V166.452H0V98.4839Z" fill="black"/>
                             <Path d="M0 15.2581H26.41V110.968H0V15.2581Z" fill="black"/>
                             <Path d="M0 15.2581H26.41V110.968H0V15.2581Z" fill="black"/>
