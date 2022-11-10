@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useCallback, useContext} from 'react';
+import React, {useRef, useEffect, useCallback, useContext, useState} from 'react';
 import { Text, View, TouchableOpacity, useWindowDimensions, StyleSheet, Animated, Easing} from 'react-native';
 import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,25 +8,19 @@ import { Audio } from 'expo-av';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
-import makeStyles from './Screens.styles.js';
+import styles from './styles/Home.styles';
 
 export default function Home({ navigation }) {
-    const dispatch = useDispatch();
-    const settings = useSelector( state => state.settings );
-
-    const {fontScale} = useWindowDimensions(); 
-    const styles = makeStyles(fontScale);
-
     return (
         <View style={{alignItems: "center"}} >
-            <View style={[styles.row]}></View>
+            <View style={styles.row}></View>
             <View style={styles.row}>
                 <View style={[styles.partition, {width: '20%'}]}>
                     <TouchableOpacity onPress={() => { navigation.navigate('About'); }}>
-                        <AntDesign name="questioncircle" size={"25%"} color="gray" />
+                        <AntDesign name="questioncircle" size={moderateScale(25, 0.25)} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate('Settings'); }}>
-                        <Feather name="settings" size={"25%"} color="gray" />
+                        <Feather name="settings" size={moderateScale(25, 0.25)} color="black" />
                     </TouchableOpacity>
                 </View>
             </View>

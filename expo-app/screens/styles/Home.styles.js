@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
+import {scale, verticalScale, moderateScale} from "../../utils/Scaling"
 
-const makeStyles = fontScale => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         backgroundColor: "#E5E5E5",
         height: "90%",
@@ -26,18 +27,18 @@ const makeStyles = fontScale => StyleSheet.create({
         justifyContent: 'center',
     },
     titleText: {
-        fontSize: 70 / fontScale,
-        lineHeight: 70 / fontScale,
+        fontSize: moderateScale(70),
+        lineHeight: moderateScale(70),
         paddingTop: "10%",
     },
     body: {
-        width: "50%",
+        width: "45%",
         height: "40%",
         justifyContent: 'center',
     },
     bodyText: {
-        fontSize: 32 / fontScale,
-        lineHeight: 40 / fontScale,
+        fontSize: moderateScale(32),
+        lineHeight: moderateScale(40),
     },
     begin: {
         width: "60%",
@@ -47,8 +48,8 @@ const makeStyles = fontScale => StyleSheet.create({
         borderRadius: 38,
     },
     beginText: {
-        fontSize: 40 / fontScale,
-        lineHeight:60 / fontScale,
+        fontSize: moderateScale(40),
+        lineHeight: moderateScale(60),
         letterSpacing: 2,
         color: "white"
     },
@@ -57,42 +58,24 @@ const makeStyles = fontScale => StyleSheet.create({
         alignItems: "center"
     },
     demoText: {
-        fontSize: 18 / fontScale,
-        lineHeight: 40 / fontScale,
+        fontSize: moderateScale(18),
+        lineHeight: moderateScale(40),
         color: "gray"
     },
     line: {
         width: "75%",
-        height: 15 / fontScale,
+        height: moderateScale(14),
         borderTopLeftRadius: 50,
         borderBottomLeftRadius: 50,
         backgroundColor: "black",
     },
     dot: {
-        width: 15 / fontScale,
-        height: 15 / fontScale,
+        width: moderateScale(14),
+        height: moderateScale(14),
 
         backgroundColor: "black",
         borderRadius: 50
     },
-    aboutHeader: {
-        width: "85%",
-        height: "8%",
-        justifyContent: 'flex-start',
-        paddingTop: "5%"
-    },
-    aboutHeaderText: {
-        fontSize: 40 / fontScale,
-        lineHeight: 40 / fontScale,
-        fontFamily: "PoppinsSemiBold"
-    },
-    aboutText: {
-        height: "15%",
-        width: "85%",
-        fontFamily: "PoppinsRegular",
-        fontSize: 18 / fontScale,
-        lineHeight: 25 / fontScale
-    },
 });
 
-export default makeStyles;
+export default styles;

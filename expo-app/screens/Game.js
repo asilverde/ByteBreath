@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './Screens.styles.js';
 import BoxBreathing from '../components/BoxBreathing';
 import LineBreathing from '../components/LineBreathing';
 import TriBreathing from '../components/TriBreathing';

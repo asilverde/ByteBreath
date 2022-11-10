@@ -8,4 +8,4 @@ const scale = size => width / baseWidth * size;
 const verticalScale = size => height / baseHeight * size;
 const moderateScale = (size, factor = 0.5) => size + (scale(size) - size) * factor;
 
-export {scale, verticalScale, moderateScale, baseWidth, baseHeight};
+export {scale, verticalScale, moderateScale, baseHeight, baseWidth};

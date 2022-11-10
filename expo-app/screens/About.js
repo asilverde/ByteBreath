@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState, useCallback} from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
-import makeStyles from './Screens.styles.js';
+import styles from './styles/About.styles';
 
 import { AntDesign, Feather} from '@expo/vector-icons';
 import { Audio } from 'expo-av';
@@ -9,51 +9,47 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
 export default function About({ navigation }) {
-
-    const {fontScale} = useWindowDimensions(); 
-    const styles = makeStyles(fontScale);
-
     return (
-        <View>
+        <View style={{alignItems: "center"}} >
             <View style={styles.row}></View>
             <View style={[styles.row, {justifyContent: 'space-between'}]}>
                 <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
                     <TouchableOpacity onPress={() => { navigation.navigate('Home') } }>
-                        <AntDesign name="close" size={"25%"} color="black" />
+                        <AntDesign name="close" size={moderateScale(25, 0.25)} color="black" />
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.partition, {width: '20%', justifyContent: 'space-evenly'}]}>
                     <TouchableOpacity onPress={() => { navigation.navigate('About'); }}>
-                        <AntDesign name="questioncircle" size={"25%"} color="gray" />
+                        <AntDesign name="questioncircle" size={moderateScale(25, 0.25)} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate('Settings'); }}>
-                        <Feather name="settings" size={"25%"} color="gray" />
+                        <Feather name="settings" size={moderateScale(25, 0.25)} color="black" />
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={[styles.row, {height: verticalScale((1/40) * baseHeight)}]}></View>
             <View style={styles.container}>
-                <Text style={styles.aboutHeader}>
-                    <Text style={styles.aboutHeaderText}>what </Text>
-                    <Text style={[styles.aboutHeaderText, {fontSize: 25 / fontScale}]}>is this? </Text>
+                <View style={styles.row}></View>
+                <Text style={styles.header}>
+                    <Text style={styles.largeHeaderText}>what </Text>
+                    <Text style={styles.smallHeaderText}>is this? </Text>
                 </Text>
-                <View style={styles.row}>
+                <View style={[styles.row, {justifyContent: 'flex-start'}]}>
                     <View style={[styles.partition, {width: "87.5%"}]}>
-                        <View style = {styles.dot}></View>
-                        <View style = {styles.dot}></View>
-                        <View style = {styles.dot}></View>
                         <View style = {styles.line}></View>
+                        <View style = {styles.dot}></View>
+                        <View style = {styles.dot}></View>
+                        <View style = {styles.dot}></View>
                     </View>
                 </View>
                 <Text style={[styles.aboutText]}>
                     A simple & interactive deep breathing exercise to help you lower anxiety & stress.
                 </Text>
 
-                <Text style={styles.aboutHeader}>
-                    <Text style={[styles.aboutHeaderText, {fontSize: scale(40), }]}>how </Text>
-                    <Text style={[styles.aboutHeaderText, {fontSize: scale(25)}]}>does it work? </Text>
+                <Text style={styles.header}>
+                    <Text style={styles.largeHeaderText}>how </Text>
+                    <Text style={styles.smallHeaderText}>does it work? </Text>
                 </Text>
-                <View style={styles.row}>
+                <View style={[styles.row, {justifyContent: 'flex-start'}]}>
                     <View style={[styles.partition, {width: "87.5%"}]}>
                         <View style = {styles.line}></View>
                         <View style = {styles.dot}></View>
@@ -64,11 +60,11 @@ export default function About({ navigation }) {
                 <Text style={styles.aboutText}>
                     The exercise combines your senses on one task so you can focus and simplify your thoughts
                 </Text>
-                <Text style={styles.aboutHeader}>
-                    <Text style={[styles.aboutHeaderText, {fontSize: scale(40), }]}>who </Text>
-                    <Text style={[styles.aboutHeaderText, {fontSize: scale(25)}]}>should care? </Text>
+                <Text style={styles.header}>
+                    <Text style={styles.largeHeaderText}>who </Text>
+                    <Text style={styles.smallHeaderText}>should care? </Text>
                 </Text>
-                <View style={styles.row}>
+                <View style={[styles.row, {justifyContent: 'flex-start'}]}>
                     <View style={[styles.partition, {width: "87.5%"}]}>
                         <View style = {styles.line}></View>
                         <View style = {styles.dot}></View>
@@ -122,40 +118,6 @@ export default function About({ navigation }) {
 //         fontSize: moderateScale(18),
 //         lineHeight: moderateScale(25)
 //     },
-//     body: {
-//         width: moderateScale((1/2) * baseWidth),
-//         height: moderateScale((7/20) * baseHeight),
-//         justifyContent: 'flex-end',
-//     },
-//     bodyText: {
-//         fontSize: moderateScale(32),
-//         lineHeight: moderateScale(40),
-//     },
-//     begin: {
-//         width: moderateScale((1/2) * baseWidth), 
-//         height: moderateScale((1/12) * baseHeight),
-//         justifyContent: "center",
-//         alignItems: "center",
-//         backgroundColor: "#000000",
-//         borderRadius: 38,
-//     },
-//     beginText: {
-//         fontSize: moderateScale(40),
-//         lineHeight: moderateScale(60),
-//         letterSpacing: 2,
-//         color: "white"
-//     },
-//     demo: {
-//         width: "50%", 
-//         alignItems: "center"
-//     },
-//     demoText: {
-//         fontSize: moderateScale(18),
-//         lineHeight: moderateScale(40),
-//         /* or 175% */
-//         color: "gray"
-
-//     },
 //     line: {
 //         width: scale((15/20) * baseWidth),
 //         height: moderateScale((1/60) * baseHeight),
@@ -171,3 +133,72 @@ export default function About({ navigation }) {
 //         borderRadius: 50
 //     },
 // })
+
+
+// <View>
+        // <View style={styles.row}></View>
+        // <View style={[styles.row, {backgroundColor: "blue", justifyContent: 'space-between'}]}>
+        //     <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
+        //         <TouchableOpacity onPress={() => { navigation.navigate('Home') } }>
+        //             <AntDesign name="close" size={moderateScale(25, 0.25)} color="black" />
+        //         </TouchableOpacity>
+        //     </View>
+        //     <View style={[styles.partition, {width: '20%', justifyContent: 'space-evenly'}]}>
+        //         <TouchableOpacity onPress={() => { navigation.navigate('About'); }}>
+        //             <AntDesign name="questioncircle" size={moderateScale(25, 0.25)} color="black" />
+        //         </TouchableOpacity>
+        //         <TouchableOpacity onPress={() => { navigation.navigate('Settings'); }}>
+        //             <Feather name="settings" size={moderateScale(25, 0.25)} color="black" />
+        //         </TouchableOpacity>
+        //     </View>
+        // </View>
+//             <View style={styles.row}></View>
+//             <View style={styles.container}>
+                // <Text style={styles.header}>
+                //     <Text style={styles.largeHeaderText}>what </Text>
+                //     <Text style={styles.smallHeaderText}>is this? </Text>
+                // </Text>
+                // <View style={[styles.row, {justifyContent: 'flex-start'}]}>
+                //     <View style={[styles.partition, {width: "87.5%"}]}>
+                //         <View style = {styles.line}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //     </View>
+                // </View>
+                // <Text style={[styles.aboutText]}>
+                //     A simple & interactive deep breathing exercise to help you lower anxiety & stress.
+                // </Text>
+
+                // <Text style={styles.header}>
+                //     <Text style={styles.largeHeaderText}>how </Text>
+                //     <Text style={styles.smallHeaderText}>does it work? </Text>
+                // </Text>
+                // <View style={[styles.row, {justifyContent: 'flex-start'}]}>
+                //     <View style={[styles.partition, {width: "87.5%"}]}>
+                //         <View style = {styles.line}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //     </View>
+                // </View>
+                // <Text style={styles.aboutText}>
+                //     The exercise combines your senses on one task so you can focus and simplify your thoughts
+                // </Text>
+                // <Text style={styles.header}>
+                //     <Text style={styles.largeHeaderText}>who </Text>
+                //     <Text style={styles.smallHeaderText}>should care? </Text>
+                // </Text>
+                // <View style={[styles.row, {justifyContent: 'flex-start'}]}>
+                //     <View style={[styles.partition, {width: "87.5%"}]}>
+                //         <View style = {styles.line}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //         <View style = {styles.dot}></View>
+                //     </View>
+                // </View>
+                // <Text style={styles.aboutText}>
+                //     Anyone who has said “I’ve tried to meditate but I can’t focus”
+                // </Text>
+//             </View>
+//         </View>
