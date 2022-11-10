@@ -40,9 +40,7 @@ const styles = StyleSheet.create({
     },
     currentDisplay: {
         fontSize: moderateScale(15),
-        lineHeight: moderateScale(40),
-        fontFamily: "PoppinsRegular",
-        paddingBottom: moderateScale(3)
+        fontFamily: "PoppinsRegular"
     },
     settingsRow: {
         width: "80%",

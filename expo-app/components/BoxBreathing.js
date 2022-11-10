@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import Svg, { Rect } from 'react-native-svg';
 import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
 
 
@@ -132,11 +131,11 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                 easing: Easing.linear
             }).start(({finished}) => {
                 if (finished) {
-                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 4]);
-                    if (currentBreathState == 3) {
+                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % breathingLength.length]);
+                    if (currentBreathState == (breathingLength.length - 1)) {
                         setScore(score + 1);
                     }
-                    setCurrentBreathState((currentBreathState + 1) % 4);
+                    setCurrentBreathState((currentBreathState + 1) % breathingLength.length);
                 }
             });
         }
@@ -148,7 +147,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
             outputRange: [0.7, 1],
           })}}>
             <ImageBackground source={backgroundURI}  style={{alignItems: "center", width: '100%', height: '100%'}}>
-                <View style={[styles.row, {height: verticalScale((1/25) * baseHeight)}]}></View>
+                <View style={styles.row}></View>
                 <View style={[styles.row, {justifyContent: 'space-between'}]}>
                     <View style={[styles.partition, {width: '10%', justifyContent: 'center'}]}>
                         <TouchableOpacity onPress={() => { endSession(score); } }>
@@ -159,7 +158,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                 <View style = {styles.command}>
                     <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
                         inputRange: [-height, height],
-                        outputRange: [scale(40), scale(30)],
+                        outputRange: [scale(50), scale(35)],
                     })}]}>{breathingPath[currentBreathState]}</Animated.Text>
                 </View>
                     

@@ -56,10 +56,10 @@ export default function Settings({ navigation }) {
         };
       
         return (
-          <View style={{width: "100%", height: "20%"}}>
+          <View style={{width: "100%", height: "22%"}}>
             <View style={[styles.row, { width: "85%", height: "40%",
                           justifyContent: 'space-evenly', alignItems: "flex-end",}]}>
-                    <TouchableOpacity style={[styles.partition, {justifyContent: 'flex-start', width: "90%"}]} onPressIn={toggleOpen} activeOpacity={0.0}>
+                    <TouchableOpacity style={[styles.partition, {justifyContent: 'flex-start', width: "80%"}]} onPressIn={toggleOpen} activeOpacity={0.0}>
                         <Text style={[styles.settingTitle]}>{title}</Text>
                         <Text style={styles.currentDisplay}>{current}</Text>
                     </TouchableOpacity>
