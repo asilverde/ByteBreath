@@ -131,11 +131,11 @@ export default function LineBreathing ( {endSession, audioFile} ) {
                 easing: Easing.linear
             }).start(({finished}) => {
                 if (finished) {
-                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % 2]);
-                    if (currentBreathState == 1) {
+                    setCurrentBreathLength(breathingLength[(currentBreathState + 1) % breathingLength.length]);
+                    if (currentBreathState == (breathingLength.length - 1)) {
                         setScore(score + 1);
                     }
-                    setCurrentBreathState((currentBreathState + 1) % 2);
+                    setCurrentBreathState((currentBreathState + 1) % breathingLength.length);
                 }
             });
         }
@@ -157,7 +157,7 @@ export default function LineBreathing ( {endSession, audioFile} ) {
                 <View style = {styles.command}>
                     <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
                         inputRange: [-height, height],
-                        outputRange: [scale(40), scale(30)],
+                        outputRange: [scale(50), scale(35)],
                     })}]}>{breathingPath[currentBreathState]}</Animated.Text>
                 </View>
 
