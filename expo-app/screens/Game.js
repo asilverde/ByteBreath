@@ -164,6 +164,38 @@ export default function Game({ navigation }) {
         }
     }, [score]);
 
+    const drawPath = () => {
+        if (settings.style == "tri") {
+            return (
+                <>
+                    <View style = {[styles.triangleLine, 
+                    {   height: (100 * pythagorean(width, height*1.5) / (2 * height)) + "%",
+                        transform: [
+                            {translateY: (pythagorean(width, height*1.5) / 2) },
+                            {rotate: "-" + (Math.asin(width / pythagorean(width, height*1.55))) + "rad"},
+                            {translateY: -(pythagorean(width, height*1.65) / 2) },
+                            {translateX: 0.02 * width}
+                        ]
+                    }]}></View>
+                    <View style = {[styles.triangleLine,
+                    {   height: (100 * pythagorean(width, height*1.5) / (2 * height)) + "%",
+                        transform: [
+                            {translateY: (pythagorean(width, height*1.5) / 2) },
+                            {rotate: (Math.asin(width / pythagorean(width, height*1.55))) + "rad"},
+                            {translateY: -(pythagorean(width, height*1.65) / 2) },
+                            {translateX: -0.02 * width}
+                        ]
+                    }]}></View>
+                    <View style = {styles.horizontalLine}></View>
+                </>
+            );
+        } else if (settings.style == "line") {
+            return(<View style={styles.verticalLine}></View>);
+        } else {
+            return;
+        }
+    }
+
     useEffect(() => {
         if(isFollowing) {
             Animated.timing(path[currentBreathState][0], {
@@ -204,7 +236,9 @@ export default function Game({ navigation }) {
                     })}]}>{breathingPath[currentBreathState]}</Animated.Text>
                 </View>
                     
-                <View style = {styles.container}>
+                <View style = {[styles.container, {borderColor: (settings.style == "box") ? "#777777" : null,
+                                                   borderWidth: (settings.style == "box") ? scale(5) : null}]}>
+                    {drawPath()}
                     <Animated.View style = {[styles.button, {transform: [{translateX:translation.x}, {translateY:translation.y}]}]}>
                         <View 
                         style = {[styles.touch, { backgroundColor: (isFollowing ? "#E5E5E5" : 'black') }
@@ -246,8 +280,6 @@ const styles = StyleSheet.create({
         width: "62%",
         alignItems: "center",
         justifyContent: "center",
-        borderWidth: scale(5),
-        borderColor: "#777777"
     },
     row: {
         height: verticalScale((1/20) * baseHeight),
@@ -295,5 +327,28 @@ const styles = StyleSheet.create({
         height: moderateScale(20),
         borderRadius: 100,
     },
+    verticalLine: {
+        position: "absolute",
+        height: '100%',
+        width: '3%',
+        borderRadius: 40,
+        backgroundColor: "gray"
+    },
+    horizontalLine: {
+        position: "absolute", 
+        height: moderateScale(8),
+        width: '100%',
+        top:"25%",
+        borderRadius: 10,
+        backgroundColor: '#777777'
+    },
+    triangleLine: {
+        position: "absolute", 
+        height: "80%", 
+        width: moderateScale(8),
+        top:"25%",
+        borderRadius: 40,
+        backgroundColor: '#777777'     
+    }
 })
 
