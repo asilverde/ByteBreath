@@ -9,8 +9,28 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
 import styles from './styles/Home.styles';
+import { auth } from '../firebase.js';
+import { signInAnonymously } from "firebase/auth";
 
 export default function Home({ navigation }) {
+
+    const handleAuth = () => {
+        signInAnonymously(auth)
+        .then(userCredentials => {
+          const user = userCredentials.user
+          console.log(user)
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    }
+
+    useEffect(() => {
+        handleAuth();
+    }, []);
+
+
     return (
         <View style={{alignItems: "center"}} >
             <View style={styles.row}></View>
