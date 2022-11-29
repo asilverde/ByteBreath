@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../../utils/Scaling.js"
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
@@ -13,12 +13,10 @@ export default function TriBreathing ( {endSession, audioFile} ) {
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:0, y:height})).current;
     const [isFollowing, setIsFollowing] = useState(false);
-    const [path, setPath] = useState([[translation.y, -height / 2], [translation.x, -width], [translation.y, -height / 2], [translation.x, width], [translation.y, height], [translation.x, 0]]);
-    const dispatch = useDispatch();
+    const [path] = useState([[translation.y, -height / 2], [translation.x, -width], [translation.y, -height / 2], [translation.x, width], [translation.y, height], [translation.x, 0]]);
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
-    const [timestamp, setTimestamp] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
                              settings.exhale * 1000];
@@ -27,7 +25,7 @@ export default function TriBreathing ( {endSession, audioFile} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
+    const backgroundURI = (settings.scene == 'space') ? require('../../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../../assets/backgrounds/nature.jpg') : require('../../assets/backgrounds/cloud.jpg'))
 
     const pythagorean = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -125,7 +123,6 @@ export default function TriBreathing ( {endSession, audioFile} ) {
 
     useEffect(() => {
         if(isFollowing) {
-            setTimestamp(Date.now());
             Animated.parallel([
                 Animated.timing(path[(2 * currentBreathState)][0], {
                     toValue: path[(2 * currentBreathState)][1],

@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../../utils/Scaling.js"
 
 
 export default function BoxBreathing ( {endSession, audioFile} ) {
@@ -13,11 +13,15 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:-width, y:height})).current;
-    const [isFollowing, setIsFollowing] = useState(false);
-    const [path, setPath] = useState([[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]);
-    const dispatch = useDispatch();
-    const settings = useSelector( state => state.settings );
+
     const [hasStarted, setHasStarted] = useState(0);
+    const [begunTimestamp, setBegunTimestamp] = useState(0);
+    const [timeWaited, setTimeWaited] = useState(-1);
+    const timerRef = useRef(null);
+
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [path] = useState([[translation.y, -height], [translation.x, width], [translation.y, height], [translation.x, -width]]);
+    const settings = useSelector( state => state.settings );
     const [score, setScore] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
@@ -27,7 +31,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'));
+    const backgroundURI = (settings.scene == 'space') ? require('../../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../../assets/backgrounds/nature.jpg') : require('../../assets/backgrounds/cloud.jpg'));
 
     const pythagorean = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2));
@@ -93,25 +97,37 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     // Called when user makes contact with circle
     const startBreathing = () => {
         if (!hasStarted) {
-            setHasStarted(true);
+            setTimeWaited(0);
+        } else {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+            playAudio();
         }
-        playAudio();
     }
 
     // Called when user releases contact with circle
     const stopBreathing = () => {
-        translation.stopAnimation(({ x, y }) => {
-            setCurrentBreathLength((breathingLength[currentBreathState]) * 
-            (1 - Math.abs(((currentBreathState % 2 == 0) ? y : x) + path[currentBreathState][1]) / 
-            (2 * Math.abs(path[currentBreathState][1]))));
-        });
-        pauseAudio();
+        if (hasStarted) {
+            translation.stopAnimation(({ x, y }) => {
+                setCurrentBreathLength((breathingLength[currentBreathState]) * 
+                (1 - Math.abs(((currentBreathState % 2 == 0) ? y : x) + path[currentBreathState][1]) / 
+                (2 * Math.abs(path[currentBreathState][1]))));
+            });
+            pauseAudio();
+        } else {
+            clearTimeout(timerRef.current);
+            setTimeWaited(-1);
+        }
     }
 
     useEffect(() => {
         loadSound();
     }, []);
+
+    useEffect(() => {
+        if (timeWaited >= 3){
+            startBreathing();
+        }
+    }, [hasStarted]);
 
     useEffect(() => {
         if (score == 5) {
@@ -121,6 +137,18 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
             endSession(score);
         }
     }, [score]);
+
+    useEffect(() => {
+        if (!hasStarted && timeWaited >= 0) {
+            if (timeWaited >= 3){
+                setHasStarted(true);
+            } else {
+                timerRef.current = setTimeout(() => {
+                    setTimeWaited(timeWaited + 1);
+                }, 1000);
+            }
+        }
+    }, [timeWaited]);
 
     useEffect(() => {
         if(isFollowing) {
@@ -159,7 +187,7 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
                     <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
                         inputRange: [-height, height],
                         outputRange: [scale(50), scale(35)],
-                    })}]}>{breathingPath[currentBreathState]}</Animated.Text>
+                    })}]}>{((timeWaited == -1) ? "Hold To Begin" : ((!hasStarted) ? (3 - timeWaited): breathingPath[currentBreathState]))}</Animated.Text>
                 </View>
                     
                 <View style = {styles.container}>
@@ -224,7 +252,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     command: {
-        width: "50%",
+        width: "75%",
         height: "15%",
         justifyContent:"flex-start",
         alignItems:"center"

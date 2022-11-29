@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {ImageBackground, View, Animated, Easing, TouchableOpacity, Text, Dimensions, StyleSheet} from 'react-native';
 import { MaterialIcons} from '@expo/vector-icons';
-import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../utils/Scaling.js"
+import {scale, verticalScale, moderateScale, baseWidth, baseHeight} from "../../utils/Scaling.js"
 import { AntDesign } from '@expo/vector-icons';
 
 
@@ -14,13 +14,13 @@ export default function LineBreathing ( {endSession, audioFile} ) {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:0, y:height})).current;
+    const [hasBegun, setHasBegun] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [path, setPath] = useState([[translation.y, -height], [translation.y, height]]);
+    const [path] = useState([[translation.y, -height], [translation.y, height]]);
     const dispatch = useDispatch();
     const settings = useSelector( state => state.settings );
     const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
-    const [timestamp, setTimestamp] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.exhale * 1000];
     const breathingPath = ["Inhale", "Exhale"];
@@ -28,7 +28,7 @@ export default function LineBreathing ( {endSession, audioFile} ) {
     const [currentBreathLength, setCurrentBreathLength] = useState(breathingLength[0]);
 
     const audio = useRef(new Audio.Sound());
-    const backgroundURI = (settings.scene == 'space') ? require('../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../assets/backgrounds/nature.jpg') : require('../assets/backgrounds/cloud.jpg'))
+    const backgroundURI = (settings.scene == 'space') ? require('../../assets/backgrounds/space.jpg') : ((settings.scene == 'nature') ? require('../../assets/backgrounds/nature.jpg') : require('../../assets/backgrounds/cloud.jpg'))
 
     const pythagorean = (x_dist, y_dist) => {
         return Math.sqrt(Math.pow(x_dist, 2) + Math.pow(y_dist, 2))
@@ -122,8 +122,13 @@ export default function LineBreathing ( {endSession, audioFile} ) {
     }, [score]);
 
     useEffect(() => {
+        if (hasBegun) {
+            
+        }
+    }, [score]);
+
+    useEffect(() => {
         if(isFollowing) {
-            setTimestamp(Date.now());
             Animated.timing(path[currentBreathState][0], {
                 toValue: path[currentBreathState][1],
                 useNativeDriver: false,
