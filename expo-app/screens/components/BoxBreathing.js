@@ -15,7 +15,6 @@ export default function BoxBreathing ( {endSession, audioFile} ) {
     const translation = useRef(new Animated.ValueXY({x:-width, y:height})).current;
 
     const [hasStarted, setHasStarted] = useState(0);
-    const [begunTimestamp, setBegunTimestamp] = useState(0);
     const [timeWaited, setTimeWaited] = useState(-1);
     const timerRef = useRef(null);
 

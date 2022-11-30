@@ -12,10 +12,14 @@ export default function TriBreathing ( {endSession, audioFile} ) {
     const height = (Dimensions.get('window').height / 2) * 0.6;
     const width = (Dimensions.get('window').width / 2) * 0.6;
     const translation = useRef(new Animated.ValueXY({x:0, y:height})).current;
+
+    const [hasStarted, setHasStarted] = useState(0);
+    const [timeWaited, setTimeWaited] = useState(-1);
+    const timerRef = useRef(null);
+
     const [isFollowing, setIsFollowing] = useState(false);
     const [path] = useState([[translation.y, -height / 2], [translation.x, -width], [translation.y, -height / 2], [translation.x, width], [translation.y, height], [translation.x, 0]]);
     const settings = useSelector( state => state.settings );
-    const [hasStarted, setHasStarted] = useState(0);
     const [score, setScore] = useState(0);
 
     const breathingLength = [settings.inhale * 1000, settings.pause * 1000, 
@@ -91,27 +95,39 @@ export default function TriBreathing ( {endSession, audioFile} ) {
     // Called when user makes contact with circle
     const startBreathing = () => {
         if (!hasStarted) {
-            setHasStarted(true);
+            setTimeWaited(0);
+        } else {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+            playAudio();
         }
-        playAudio();
     }
 
     // Called when user releases contact with circle
     const stopBreathing = () => {
-        translation.stopAnimation(({ x, y }) => {
-            const prevState = (((currentBreathState - 1) % 3) + 3) % 3;
-            const ydiff = y - path[2*currentBreathState][1];
-            const xdiff = x - path[2*currentBreathState + 1][1];
-            setCurrentBreathLength(breathingLength[currentBreathState] * 
-            Math.abs(pythagorean(xdiff, ydiff)) / Math.abs(pythagorean(path[2*currentBreathState][1] - path[2*prevState][1], path[2*currentBreathState + 1][1] - path[2*prevState+1][1])));
-        });
-        pauseAudio();
+        if (hasStarted) {
+            translation.stopAnimation(({ x, y }) => {
+                const prevState = (((currentBreathState - 1) % 3) + 3) % 3;
+                const ydiff = y - path[2*currentBreathState][1];
+                const xdiff = x - path[2*currentBreathState + 1][1];
+                setCurrentBreathLength(breathingLength[currentBreathState] * 
+                Math.abs(pythagorean(xdiff, ydiff)) / Math.abs(pythagorean(path[2*currentBreathState][1] - path[2*prevState][1], path[2*currentBreathState + 1][1] - path[2*prevState+1][1])));
+            });
+            pauseAudio();
+        } else {
+            clearTimeout(timerRef.current);
+            setTimeWaited(-1);
+        }
     }
 
     useEffect(() => {
         loadSound();
     }, []);
+
+    useEffect(() => {
+        if (timeWaited >= 3){
+            startBreathing();
+        }
+    }, [hasStarted]);
 
     useEffect(() => {
         if (score == 5) {
@@ -120,6 +136,18 @@ export default function TriBreathing ( {endSession, audioFile} ) {
             endSession(score);
         }
     }, [score]);
+
+    useEffect(() => {
+        if (!hasStarted && timeWaited >= 0) {
+            if (timeWaited >= 3){
+                setHasStarted(true);
+            } else {
+                timerRef.current = setTimeout(() => {
+                    setTimeWaited(timeWaited + 1);
+                }, 1000);
+            }
+        }
+    }, [timeWaited]);
 
     useEffect(() => {
         if(isFollowing) {
@@ -165,7 +193,7 @@ export default function TriBreathing ( {endSession, audioFile} ) {
                     <Animated.Text style = {[styles.text, {fontSize:translation.y.interpolate({
                         inputRange: [-height, height],
                         outputRange: [scale(50), scale(35)],
-                    })}]}>{breathingPath[currentBreathState]}</Animated.Text>
+                    })}]}>{((timeWaited == -1) ? "Hold To Begin" : ((!hasStarted) ? (3 - timeWaited): breathingPath[currentBreathState]))}</Animated.Text>
                 </View>
             
                 <View style = {styles.container}>
